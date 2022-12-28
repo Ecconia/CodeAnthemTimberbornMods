@@ -1,0 +1,7 @@
+<Project>
+	<PropertyGroup>
+		<GameDir>$(appdata)\r2modmanPlus-local\Timberborn\profiles</GameDir>
+		<TB_CameraTweaks>$(GameDir)\Default\BepInEx\plugins\Kumare_CameraTweaks</TB_CameraTweaks>
+		<TB_CameraTweaks2>$(GameDir)\Modding\BepInEx\plugins\Kumare_CameraTweaks</TB_CameraTweaks2>
+	</PropertyGroup>
+</Project>

@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33103.184
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TB_CameraTweaks", "TB_CameraTweaks\TB_CameraTweaks.csproj", "{C0691524-15B0-42D3-A372-BFF677C6F43D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DE7B1009-3222-4868-9F57-699E4EB24A3F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C0691524-15B0-42D3-A372-BFF677C6F43D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0691524-15B0-42D3-A372-BFF677C6F43D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0691524-15B0-42D3-A372-BFF677C6F43D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0691524-15B0-42D3-A372-BFF677C6F43D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9FD10FC2-09E4-47CB-802F-83886428C482}
+	EndGlobalSection
+EndGlobal
