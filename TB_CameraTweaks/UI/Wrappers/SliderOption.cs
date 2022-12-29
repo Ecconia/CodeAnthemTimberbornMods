@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Xml.Linq;
 using TB_CameraTweaks.Configs;
+using TimberApi.ConfigSystem;
 using TimberApi.UiBuilderSystem.CustomElements;
 using TimberApi.UiBuilderSystem.ElementSystem;
+using Timberborn.SettingsSystem;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 namespace TB_CameraTweaks.UI.Wrappers
@@ -50,7 +54,6 @@ namespace TB_CameraTweaks.UI.Wrappers
             builder.AddPreset(factory => factory.Sliders().SliderCircle(Config.Min, Config.Max, Config.Value,
                 name: nameof(Config.Key) + "slider",
                 builder: builder => builder.SetStyle(style => style.marginBottom = _lenght)
-                .SetLabel(Config.SliderText)
                 .ModifyElement(x =>
                     {
                         x.RegisterValueChangedCallback(changeEvent =>
@@ -67,36 +70,185 @@ namespace TB_CameraTweaks.UI.Wrappers
         private void MakeSmoothSlider(VisualElementBuilder builder)
         {
             int steps = (int)Math.Ceiling((Config.Max - Config.Min) / Config.Step);
-            builder
-                //.SetFlexDirection(FlexDirection.Row)
-                .AddPreset(factory => factory.Labels().GameTextSmall(text: $"[Min: {Config.Min}]"))
 
+            builder.AddComponent(b =>
+            {
+                b.SetFlexDirection(FlexDirection.Row)
+
+                .AddPreset(factory => factory.Labels().GameTextSmall(text: $"Min: {Config.Min}"))
                 .AddPreset(factory => factory.Sliders().SliderIntCircle(0, steps, (int)Math.Ceiling(Config.Value),
-                name: nameof(Config.Key) + "slider", width: 0,
-                builder: builder => builder
-                .SetStyle(style =>
+                    name: nameof(Config.Key) + "slider",
+                    builder: b => b
+                    .SetStyle(s =>
                     {
+                        s.paddingBottom = 10;
+                        s.flexGrow = 1;
+                        s.marginLeft = 5;
+                        s.marginRight = 5;
+                    }
+                    ).AddClass("settings-slider__slider")
+                    .ModifyElement(x => x.RegisterValueChangedCallback(changeEvent =>
+                    {
+                        float sum = (changeEvent.newValue * Config.Step) + Config.Min;
+                        Config.Value = sum;
+                        _label.text = $"{Config.LabelText}: {sum}";
+                    }
+                    ))
+                ))
+                .AddPreset(factory => factory.Labels().GameTextSmall(text: $"Max: {Config.Max}"));
+            });
+        }
+
+        private void MakeSmoothSlider2(VisualElementBuilder builder)
+        {
+            int steps = (int)Math.Ceiling((Config.Max - Config.Min) / Config.Step);
+
+            //builder.AddComponent(b => b
+            //    .SetFlexDirection(FlexDirection.Row)
+            //    .SetWidth(600)
+            //    .SetAlignItems(Align.Auto)
+            //    .SetAlignContent(Align.Center)
+            //    .SetJustifyContent(Justify.SpaceAround)
+            //    .AddPreset(factory => factory.Labels().DefaultText(text: "AAAAAAAA"))
+            //    .AddPreset(factory => factory.Sliders().SliderCircle(0, 10, 10))
+            //    .AddPreset(factory => factory.Labels().DefaultText(text: "AAAAAAAA"))
+            //);
+
+            builder.AddComponent(b => b
+                //.SetStyle(s =>
+                //{
+                //    s.flexDirection = FlexDirection.Row;
+                //    //s.marginLeft = 10;
+                //    //s.marginRight = 10;
+                //    //s.alignContent = Align.Center;
+                //    s.display = DisplayStyle.Flex;
+                //    //s.alignItems = Align.Center;
+                //    s.borderBottomWidth = 1;
+                //    s.borderBottomColor = new Color(100, 100, 100);
+                //    s.borderTopWidth = 1;
+                //    s.borderTopColor = new Color(100, 100, 100);
+                //    s.borderRightWidth = 1;
+                //    s.borderRightColor = new Color(100, 100, 100);
+                //    s.borderLeftWidth = 1;
+                //    s.borderLeftColor = new Color(100, 100, 100);
+
+                //    //s.justifyContent = Justify.SpaceBetween;
+                //    //s.width = 500;
+                //})
+                .AddPreset(factory => factory.Labels().GameTextSmall(text: $"[Min: {Config.Min}]", builder: b => b.SetStyle(s =>
+                {
+                    //style.alignSelf = Align.Center;
+                    s.borderBottomWidth = 1;
+                    s.borderBottomColor = new Color(100, 100, 100);
+                    s.borderTopWidth = 1;
+                    s.borderTopColor = new Color(100, 100, 100);
+                    s.borderRightWidth = 1;
+                    s.borderRightColor = new Color(100, 100, 100);
+                    s.borderLeftWidth = 1;
+                    s.borderLeftColor = new Color(100, 100, 100);
+                })))
+                .AddPreset(factory => factory.Sliders().SliderCircle(0, steps, (int)Math.Ceiling(Config.Value),
+                    name: nameof(Config.Key) + "slider",
+                    builder: b => b
+                    .SetStyle(s =>
+                    {
+                        s.width = 300;
+                        //s.marginBottom = new Length(10, LengthUnit.Pixel);
+                        s.borderBottomWidth = 1;
+                        s.borderBottomColor = new Color(100, 100, 100);
+                        s.borderTopWidth = 1;
+                        s.borderTopColor = new Color(100, 100, 100);
+                        s.borderRightWidth = 1;
+                        s.borderRightColor = new Color(100, 100, 100);
+                        s.borderLeftWidth = 1;
+                        s.borderLeftColor = new Color(100, 100, 100);
+                        s.flexGrow = 1;
+                        s.marginLeft = 5;
+                        s.marginRight = 5;
                         //style.position = Position.Relative;
                         //style.flexShrink = 0;
                         //style.justifyContent = Justify.Center;
                         //style.alignSelf = Align.Auto;
                     }
                 )
-
-                //.SetLabel($"[Min: {Config.Min}]")
-                .AddPreset(factory => factory.Labels().GameTextSmall(text: $"[Max: {Config.Max}]"))
-                .ModifyElement(x =>
+                .AddClass("settings-slider__slider")
+                .AddPreset(factory => factory.Labels().GameTextSmall(text: $"[Max: {Config.Max}]", builder: b => b.SetStyle(s =>
                 {
-                    x.RegisterValueChangedCallback(changeEvent =>
-                        {
-                            float sum = (changeEvent.newValue * Config.Step) + Config.Min;
-                            Config.Value = sum;
-                            _label.text = $"{Config.LabelText}: {sum}";
-                        }
-                    );
-                })
-            ));
+                    //style.alignSelf = Align.Center;
+                    s.borderBottomWidth = 1;
+                    s.borderBottomColor = new Color(100, 100, 100);
+                    s.borderTopWidth = 1;
+                    s.borderTopColor = new Color(100, 100, 100);
+                    s.borderRightWidth = 1;
+                    s.borderRightColor = new Color(100, 100, 100);
+                    s.borderLeftWidth = 1;
+                    s.borderLeftColor = new Color(100, 100, 100);
+                })))))
+           //.ModifyElement(x =>
+           //{
+           //    x.RegisterValueChangedCallback(changeEvent =>
+           //    {
+           //        float sum = (changeEvent.newValue * Config.Step) + Config.Min;
+           //        Config.Value = sum;
+           //        _label.text = $"{Config.LabelText}: {sum}";
+           //    }
+           //    );
+           //})
+           //)
+
+           //.SetFlexDirection(FlexDirection.Row)
+           //.AddPreset(factory => factory.Labels().GameTextSmall(text: $"[Min: {Config.Min}]"))
+
+           //.AddPreset(factory => factory.Sliders().SliderIntCircle(0, steps, (int)Math.Ceiling(Config.Value),
+           //name: nameof(Config.Key) + "slider", width: 0,
+           //builder: builder => builder
+           //.SetStyle(style =>
+           //    {
+           //        //style.position = Position.Relative;
+           //        //style.flexShrink = 0;
+           //        //style.justifyContent = Justify.Center;
+           //        //style.alignSelf = Align.Auto;
+           //    }
+           //)
+
+           //.SetLabel($"[Min: {Config.Min}]")
+
+           );
         }
+
+        //    builder.AddComponent(builder => builder
+        //.SetFlexDirection(FlexDirection.Row)
+        //            //.SetAlignItems(Align.Stretch)
+        //            .SetWidth(400)
+        //            .SetFlexWrap(Wrap.NoWrap)
+        //            .SetMargin(10)
+        //            .SetAlignItems(Align.FlexStart)
+        //            .SetAlignContent(Align.Center)
+        //            .SetJustifyContent(Justify.SpaceBetween)
+        //            .AddPreset(factory => factory.Labels().GameTextSmall(text: $"[Min: {Config.Min}]"))
+        //            .AddPreset(factory => factory.Sliders().SliderCircle(0, steps, (int) Math.Ceiling(Config.Value),
+        //                name: nameof(Config.Key) + "slider",
+        //                builder: builder => builder
+        //                .SetStyle(style =>
+        //                {
+        //        //style.position = Position.Relative;
+        //        //style.flexShrink = 0;
+        //        //style.justifyContent = Justify.Center;
+        //        //style.alignSelf = Align.Auto;
+        //    }
+        //            )
+        //            .AddPreset(factory => factory.Labels().GameTextSmall(text: $"[Max: {Config.Max}]"))
+        //            .ModifyElement(x =>
+        //            {
+        //        x.RegisterValueChangedCallback(changeEvent =>
+        //        {
+        //            float sum = (changeEvent.newValue * Config.Step) + Config.Min;
+        //            Config.Value = sum;
+        //            _label.text = $"{Config.LabelText}: {sum}";
+        //        }
+        //        );
+        //    })
+        //           )
 
         private void MakeSmoothSliderBackup(VisualElementBuilder builder)
         {

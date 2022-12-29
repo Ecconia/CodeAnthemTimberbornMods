@@ -27,9 +27,8 @@ namespace TB_CameraTweaks.Patchers
                 key: "Zoom Factor",
                 description: "Camera Zoom Factor (default: 1.3)",
                 min: 1.3f, max: 2.8f, def: 1.3f,
-                labelText: Loc.T($"{Plugin._tocTag}.menu.zoomfactor"),
-                sliderText: "Move Slider"
-                );
+                labelText: Loc.T($"{Plugin._tocTag}.menu.zoomfactor")
+            );
             cfg.Step = 0.1f;
             ZoomFactor = new SliderOption(cfg);
 

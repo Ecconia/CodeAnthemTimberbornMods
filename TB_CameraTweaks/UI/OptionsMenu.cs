@@ -45,15 +45,13 @@ namespace TB_CameraTweaks.UI
             AddOptionsTitle(menuContent);
             UIRegister.UpdateCallers(menuContent);
             boxBuilder.AddComponent(menuContent.Build());
-            boxBuilder.AddComponent(menuContent.Build());
-            boxBuilder.AddComponent(menuContent.Build());
 
             var loc = DependencyContainer.GetInstance<ILoc>();
             string menuTitle = loc.T($"{Plugin._tocTag}.menu.title");
 
             VisualElement root = boxBuilder.AddCloseButton("CloseButton").SetBoxInCenter().AddHeader(null,
                 $"{menuTitle} v" + MyPluginInfo.PLUGIN_VERSION).BuildAndInitialize();
-            root.Q<Button>("CloseButton").clicked += OnUICancelled;
+            root.Q<Button>(name: "CloseButton").clicked += OnUICancelled;
             UIRegister.UpdateCallers(root);
             return root;
         }

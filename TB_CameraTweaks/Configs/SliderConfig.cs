@@ -5,7 +5,7 @@ namespace TB_CameraTweaks.Configs
 {
     internal class SliderConfig
     {
-        public SliderConfig(string key, string description, float min, float max, float def, string labelText, string sliderText, float step = 0)
+        public SliderConfig(string key, string description, float min, float max, float def, string labelText, float step = 0)
         {
             Key = key;
             Description = description;
@@ -17,7 +17,6 @@ namespace TB_CameraTweaks.Configs
             Default = def;
 
             LabelText = labelText;
-            SliderText = sliderText;
 
             CreateConfigEntry();
         }
@@ -37,7 +36,6 @@ namespace TB_CameraTweaks.Configs
         public string Key { get; }
         public string Description { get; }
         public string LabelText { get; }
-        public string SliderText { get; }
         public float Step { get; set; }
         public float Min { get; }
         public float Max { get; }
