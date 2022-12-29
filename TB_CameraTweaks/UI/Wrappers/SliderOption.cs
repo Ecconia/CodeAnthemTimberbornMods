@@ -14,7 +14,6 @@ namespace TB_CameraTweaks.UI.Wrappers
     internal class SliderOption
     {
         private LocalizableLabel _label;
-        private LocalizableLabel _label2;
         private Length _lenght;
 
         public SliderOption(SliderConfig config)
@@ -70,13 +69,14 @@ namespace TB_CameraTweaks.UI.Wrappers
         private void MakeSmoothSlider(VisualElementBuilder builder)
         {
             int steps = (int)Math.Ceiling((Config.Max - Config.Min) / Config.Step);
+            int currentInSteps = (int)Math.Round((Config.Value - Config.Min) / Config.Step);
 
             builder.AddComponent(b =>
             {
                 b.SetFlexDirection(FlexDirection.Row)
 
                 .AddPreset(factory => factory.Labels().GameTextSmall(text: $"Min: {Config.Min}"))
-                .AddPreset(factory => factory.Sliders().SliderIntCircle(0, steps, (int)Math.Ceiling(Config.Value),
+                .AddPreset(factory => factory.Sliders().SliderIntCircle(0, steps, currentInSteps,
                     name: nameof(Config.Key) + "slider",
                     builder: b => b
                     .SetStyle(s =>

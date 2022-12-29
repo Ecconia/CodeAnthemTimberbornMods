@@ -4,14 +4,13 @@ using HarmonyLib;
 using System.Collections.Generic;
 using TB_CameraTweaks.Lang;
 using TB_CameraTweaks.MyLogger;
-using TB_CameraTweaks.Patchers;
-using TB_CameraTweaks.UI;
-using TimberApi.DependencyContainerSystem;
-using Timberborn.Localization;
+using TimberApi.ConsoleSystem;
+using TimberApi.ModSystem;
 
 namespace TB_CameraTweaks
 {
     [BepInPlugin(_pluginId, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+    [HarmonyPatch]
     public class Plugin : BaseUnityPlugin
     {
         public const string _pluginId = "Kumare." + MyPluginInfo.PLUGIN_NAME;
@@ -21,17 +20,29 @@ namespace TB_CameraTweaks
         internal static LogProxy Log = new("[Core] ");
         private static Harmony _harmony;
 
+        //public void Entry(IMod mod, IConsoleWriter consoleWriter)
+        //{
+        //    LogProxy._logger = this.Logger;
+        //    Config = base.Config;
+        //    Config.SaveOnConfigSet = true;
+
+        // SetupTOC();
+
+        // _harmony = new Harmony(_pluginId); _harmony.PatchAll();
+
+        //    Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
+        //}
+
         private void Awake()
         {
             LogProxy._logger = this.Logger;
-
             Config = base.Config;
             Config.SaveOnConfigSet = true;
+
             SetupTOC();
 
             _harmony = new Harmony(_pluginId);
             _harmony.PatchAll();
-            //_ = new CameraZoomPatcher(); // executing here, since ILoc is null when executed via DI
             Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
         }
 

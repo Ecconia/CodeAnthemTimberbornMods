@@ -6,7 +6,7 @@ using Timberborn.Localization;
 
 namespace TB_CameraTweaks.Patchers
 {
-    [Configurator(SceneEntrypoint.All)]
+    [Configurator(SceneEntrypoint.MainMenu)]
     internal class PatchConfigurator : IConfigurator
     {
         public void Configure(IContainerDefinition containerDefinition)
