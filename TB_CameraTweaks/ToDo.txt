@@ -1,3 +1,3 @@
 ﻿Try patcher with event callback, instead of update variable etc
 Add the Iloadable fix
-Rearrange items
+Move non mod related items to KsHelperLib
