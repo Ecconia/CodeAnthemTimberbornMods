@@ -1,0 +1,9 @@
+﻿Try patcher with event callback, instead of update variable etc
+Add default language to TOCManager and move it to libs
+	- Initialize default language enUS
+	- Update Default Language
+	- Update additional languagesw
+	- Add comment or not
+	- Remove invalid entries of lang files
+Add the Iloadable fix
+Rearrange items

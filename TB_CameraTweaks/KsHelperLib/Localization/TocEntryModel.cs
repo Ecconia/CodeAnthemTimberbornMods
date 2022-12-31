@@ -1,8 +1,8 @@
-﻿namespace TB_CameraTweaks.Lang
+﻿namespace TB_CameraTweaks.KsHelperLib.Localization
 {
     internal class TocEntryModel
     {
-        public TocEntryModel(string key, string text, string comment)
+        public TocEntryModel(string key, string text, string comment = "")
         {
             Key = key;
             Text = text;

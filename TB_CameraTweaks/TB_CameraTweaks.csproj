@@ -34,6 +34,12 @@
 		<PackageReference Include="TimberAPI" Version="0.5.1" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="KsHelperLib\Logger\" />
+	  <Folder Include="KsHelperLib\UI\Elements\" />
+	  <Folder Include="KsHelperLib\UI\Menu\" />
+	</ItemGroup>
+
 	<!--<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
 	</ItemGroup>-->

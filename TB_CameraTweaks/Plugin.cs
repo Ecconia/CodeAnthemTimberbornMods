@@ -1,11 +1,15 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
+using System;
 using System.Collections.Generic;
-using TB_CameraTweaks.Lang;
+using System.Linq;
+using TB_CameraTweaks.KsHelperLib.Localization;
 using TB_CameraTweaks.MyLogger;
 using TimberApi.ConsoleSystem;
+using TimberApi.DependencyContainerSystem;
 using TimberApi.ModSystem;
+using Timberborn.Localization;
 
 namespace TB_CameraTweaks
 {
@@ -17,21 +21,8 @@ namespace TB_CameraTweaks
 
         internal new static ConfigFile Config;
         internal static string _tocTag = $"{MyPluginInfo.PLUGIN_NAME.ToLower()}";
-        internal static LogProxy Log = new("[Core] ");
+        internal static LogProxy Log = new("[Core] ", BepInEx.Logging.LogLevel.All);
         private static Harmony _harmony;
-
-        //public void Entry(IMod mod, IConsoleWriter consoleWriter)
-        //{
-        //    LogProxy._logger = this.Logger;
-        //    Config = base.Config;
-        //    Config.SaveOnConfigSet = true;
-
-        // SetupTOC();
-
-        // _harmony = new Harmony(_pluginId); _harmony.PatchAll();
-
-        //    Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
-        //}
 
         private void Awake()
         {
@@ -46,27 +37,27 @@ namespace TB_CameraTweaks
             Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
         }
 
+        //public void Entry(IMod mod, IConsoleWriter consoleWriter)
+        //{
+        //    LogProxy._logger = this.Logger;
+        //    Config = base.Config;
+        //    Config.SaveOnConfigSet = true;
+
+        // SetupTOC();
+
+        // _harmony = new Harmony(_pluginId); _harmony.PatchAll();
+
+        //    Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
+        //}
+
         private void SetupTOC()
         {
-            List<string> languages = new List<string>() { "deDE", "enUS" };
-            List<string> entries = new List<string>()
+            TocConfig.AddAdditionalLanguage("deDE");
+            TocConfig.Header = new List<string>()
             {
-                "menu.title", // default, used as main menu title on UIPatches.cs
-                "menu.options",  // default, used as option header title on menu
-                "menu.zoomfactor"
+                $"{MyPluginInfo.PLUGIN_NAME}, Updated: {DateTime.Now}",
+                "============================================"
             };
-            TocManager tocFac = new TocManager(languages, entries);
-            tocFac.CheckFiles();
-        }
-
-        private void InitConfig()
-        {
-            // Plugin.Config.Bind(MyPluginInfo.PLUGIN_NAME, "Zoom Factor", 1.3f, new
-            // ConfigDescription("Camera Zoom Factor (default: 1.3)", new
-            // AcceptableValueRange<float>(1.3f, 2.0f)));
-
-            //            Plugin.Config.Bind(MyPluginInfo.PLUGIN_NAME, "Disable Snap Camera", false,
-            //new ConfigDescription("Disable Camera Snap (default: false)"));
         }
     }
 }
