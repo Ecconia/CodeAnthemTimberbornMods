@@ -35,5 +35,8 @@ This plugin is dependent on the magnificent [TimberAPI](https://github.com/Timbe
 
 # Changelog
 
+## v1.0.1 - 01.01.2023
+- Fixed Lang files
+
 ## v1.0.0 - 31.12.2022
 - Initial Release
