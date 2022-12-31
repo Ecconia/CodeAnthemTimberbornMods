@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="../GamePath.props" />
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+		<AssemblyName>TB_CameraTweaker</AssemblyName>
+		<Description>Timberborn Mod: Camera Tweaker</Description>
+		<Version>1.0.0</Version>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<LangVersion>latest</LangVersion>
+		<RestoreAdditionalProjectSources>
+			https://api.nuget.org/v3/index.json;
+			https://nuget.bepinex.dev/v3/index.json
+		</RestoreAdditionalProjectSources>
+		<RootNamespace>TB_CameraTweaker</RootNamespace>
+		<Company>Kumare</Company>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+		<PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+		<PackageReference Include="BepInEx.Core" Version="5.4.19" />
+		<PackageReference Include="TimberAPI" Version="0.5.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="_package\Pictures\" />
+	</ItemGroup>
+
+	<!--<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+	</ItemGroup>-->
+
+	<!--COPY ON BUILD TO TARGET-->
+	<Target Name="CopyToBepInExPlugins" AfterTargets="Build">
+		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(TB_CameraTweaks)" />
+		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(TB_CameraTweaks2)" />
+		<!--<Copy SourceFiles="$(TargetDir)\$(TargetName).pdb" DestinationFolder="$(TB_CameraTweaks)" />-->
+	</Target>
+
+	<!-- COPY ON BUILD TO TARGET -->
+	<!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="del $(TargetDir)thunderstore /Q /s&#xD;&#xA;mkdir $(TargetDir)thunderstore\plugins\MattMcMullan\ /Q&#xD;&#xA;copy $(TargetPath) $(TargetDir)thunderstore\plugins\MattMcMullan\&#xD;&#xA;copy $(ProjectDir)thunderstore\* $(TargetDir)thunderstore&#xD;&#xA;del $(TargetDir)thunderstore.zip&#xD;&#xA;powershell Compress-Archive $(TargetDir)thunderstore/* $(TargetDir)thunderstore.zip" />
+		<Exec Command="del $(TargetDir)thunderstore /Q /s&#xD;&#xA;mkdir $(TargetDir)thunderstore\plugins\MattMcMullan\ /Q&#xD;&#xA;copy $(TargetPath) $(TargetDir)thunderstore\plugins\MattMcMullan\&#xD;&#xA;copy $(ProjectDir)thunderstore\* $(TargetDir)thunderstore&#xD;&#xA;del $(TargetDir)thunderstore.zip&#xD;&#xA;powershell Compress-Archive $(TargetDir)thunderstore/* $(TargetDir)thunderstore.zip" />
+	</Target>-->
+</Project>
