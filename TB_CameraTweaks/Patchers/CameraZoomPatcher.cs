@@ -1,19 +1,18 @@
 ﻿using HarmonyLib;
 using System;
-using TB_CameraTweaks.Configs;
-using TB_CameraTweaks.MyLogger;
-using TB_CameraTweaks.UI;
-using TB_CameraTweaks.UI.Wrappers;
+using TB_CameraTweaks.KsHelperLib.Logger;
+using TB_CameraTweaks.KsHelperLib.UI.Elements.Slider;
+using TB_CameraTweaks.KsHelperLib.UI.Menu;
 using TimberApi.DependencyContainerSystem;
 using TimberApi.UiBuilderSystem.ElementSystem;
 using Timberborn.CameraSystem;
 using Timberborn.Common;
-using Timberborn.Coordinates;
 using Timberborn.Localization;
+using Timberborn.SingletonSystem;
 
 namespace TB_CameraTweaks.Patchers
 {
-    internal class CameraZoomPatcher
+    internal class CameraZoomPatcher : ILoadableSingleton
     {
         private static SliderOption ZoomFactor;
         private static ILoc Loc;
@@ -43,10 +42,13 @@ namespace TB_CameraTweaks.Patchers
 
         private static void MenuElements(VisualElementBuilder obj)
         {
+            ZoomFactor.Build(obj);
+        }
+
+        public void Load()
+        {
             Loc = DependencyContainer.GetInstance<ILoc>();
             SetupConfig();
-
-            ZoomFactor.Build(obj);
         }
 
         [HarmonyPatch(typeof(CameraComponent), nameof(CameraComponent.ModifyZoomLevel))]
@@ -82,7 +84,7 @@ namespace TB_CameraTweaks.Patchers
                 {
                     __instance._defaultZoomLimits = Instance.ModifiedZoomFactor;
                     RequireUpdate = false;
-                    Log.LogWarning($"Patch Executed. Value: {Instance.ModifiedZoomFactor.Max}");
+                    //Log.LogWarning($"Patch Executed. Value: {Instance.ModifiedZoomFactor.Max}");
                 }
             }
         }

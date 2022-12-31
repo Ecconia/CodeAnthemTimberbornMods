@@ -5,7 +5,7 @@ using Timberborn.MainMenuScene;
 using Timberborn.Options;
 using UnityEngine.UIElements;
 
-namespace TB_CameraTweaks.UI
+namespace TB_CameraTweaks.KsHelperLib.UI.Menu
 {
     internal class UIPatches
     {

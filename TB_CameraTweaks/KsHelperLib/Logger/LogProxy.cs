@@ -1,6 +1,6 @@
 ﻿using BepInEx.Logging;
 
-namespace TB_CameraTweaks.MyLogger
+namespace TB_CameraTweaks.KsHelperLib.Logger
 {
     internal enum LogProxyType
     {
@@ -16,12 +16,13 @@ namespace TB_CameraTweaks.MyLogger
     internal class LogProxy
     {
         private readonly string _tag;
-        private LogLevel Level;
+        public static LogLevel Level { get; set; }
+        private readonly LogLevel _level;
 
-        public LogProxy(string tag = "", LogLevel level = LogLevel.Info)
+        public LogProxy(string tag = "", LogLevel level = LogLevel.All)
         {
             _tag = tag;
-            Level = level;
+            _level = level;
         }
 
         internal static ManualLogSource _logger { get; set; }
@@ -63,6 +64,7 @@ namespace TB_CameraTweaks.MyLogger
 
         private void SendLogMessage(LogProxyType level, object data)
         {
+            //_logger.LogError($"Global Level is: {LogProxy.Level}, Instance Level is: {_level}");
             if ((int)level > (int)Level) return;
 
             switch (level)
@@ -107,6 +109,11 @@ namespace TB_CameraTweaks.MyLogger
             }
         }
 
-        private bool SkipLogMessage(LogLevel level) => ((int)level > (int)Level);
+        private bool SkipLogMessage(LogLevel level)
+        {
+            if (LogProxy.Level == LogLevel.All) return (int)level > (int)_level;
+
+            return (int)level > (int)LogProxy.Level;
+        }
     }
 }

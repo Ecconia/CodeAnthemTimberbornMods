@@ -2,7 +2,7 @@
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
 
-namespace TB_CameraTweaks.UI
+namespace TB_CameraTweaks.KsHelperLib.UI.Menu
 {
     [Configurator(SceneEntrypoint.All)]
     internal class UIConfigurator : IConfigurator

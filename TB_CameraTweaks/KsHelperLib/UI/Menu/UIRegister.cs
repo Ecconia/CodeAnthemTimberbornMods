@@ -2,7 +2,7 @@
 using TimberApi.UiBuilderSystem.ElementSystem;
 using UnityEngine.UIElements;
 
-namespace TB_CameraTweaks.UI
+namespace TB_CameraTweaks.KsHelperLib.UI.Menu
 {
     internal static class UIRegister
     {

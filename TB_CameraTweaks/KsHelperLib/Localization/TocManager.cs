@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using TB_CameraTweaks.MyLogger;
+using TB_CameraTweaks.KsHelperLib.Logger;
 using Timberborn.SingletonSystem;
 
 namespace TB_CameraTweaks.KsHelperLib.Localization
@@ -17,7 +17,7 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
         private bool Initialized;
         private string LangDirPath;
         private List<string> AllLanguageTags = new List<string>();
-        private LogProxy Log = new LogProxy("TocManager", LogLevel.None);
+        private LogProxy Log = new LogProxy("TocManager ", LogLevel.None);
 
         public TocManager()
         {
@@ -26,6 +26,9 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
 
         public void Load()
         {
+#if (!DEBUG)
+            return;
+#endif
             Log.LogDebug("Load()");
             Initialize();
             Log.LogDebug("Initialized");
@@ -114,7 +117,8 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
                 Log.LogDebug("CheckFile, Predefined Language Exists");
 
                 var updatedEntries = PredefinedLanguages[langTag];
-                VerifyLangFileContent(langFile, updatedEntries, true);
+                WriteUpdateToFile(langFile, updatedEntries);
+                //VerifyLangFileContent(langFile, updatedEntries, true);
             }
             else
             {
@@ -170,11 +174,13 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
             //    Log.LogDebug($"VerifyLangFileContent,newEntries2: `{item.Key}` `{item.Text}` `{item.Comment}`");
             //}
             //Log.LogDebug($"VerifyLangFileContent, NeedUpdate? {inconsistent} - Verify Complete: {newEntries.Count} Lines");
-            if (inconsistent)
-            {
-                var sortedNewEntries = newEntries.OrderBy(x => x.Key).ToList();
-                FileHandler.WriteUpdatedContent(langFile, sortedNewEntries);
-            }
+            if (inconsistent) WriteUpdateToFile(langFile, newEntries);
+        }
+
+        private void WriteUpdateToFile(FileInfo langFile, IEnumerable<TocEntryModel> updatedEntries)
+        {
+            var sortedNewEntries = updatedEntries.OrderBy(x => x.Key).ToList();
+            FileHandler.WriteUpdatedContent(langFile, sortedNewEntries);
         }
     }
 }

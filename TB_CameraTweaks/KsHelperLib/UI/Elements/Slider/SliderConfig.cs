@@ -1,7 +1,7 @@
 ﻿using BepInEx.Configuration;
 using System;
 
-namespace TB_CameraTweaks.Configs
+namespace TB_CameraTweaks.KsHelperLib.UI.Elements.Slider
 {
     internal class SliderConfig
     {

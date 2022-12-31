@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Xml.Linq;
-using TB_CameraTweaks.Configs;
 using TimberApi.ConfigSystem;
 using TimberApi.UiBuilderSystem.CustomElements;
 using TimberApi.UiBuilderSystem.ElementSystem;
@@ -9,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
-namespace TB_CameraTweaks.UI.Wrappers
+namespace TB_CameraTweaks.KsHelperLib.UI.Elements.Slider
 {
     internal class SliderOption
     {
@@ -89,7 +88,7 @@ namespace TB_CameraTweaks.UI.Wrappers
                     ).AddClass("settings-slider__slider")
                     .ModifyElement(x => x.RegisterValueChangedCallback(changeEvent =>
                     {
-                        float sum = (changeEvent.newValue * Config.Step) + Config.Min;
+                        float sum = changeEvent.newValue * Config.Step + Config.Min;
                         Config.Value = sum;
                         _label.text = $"{Config.LabelText}: {sum}";
                     }
@@ -312,7 +311,7 @@ namespace TB_CameraTweaks.UI.Wrappers
                 {
                     x.RegisterValueChangedCallback(changeEvent =>
                     {
-                        float sum = (changeEvent.newValue * Config.Step) + Config.Min;
+                        float sum = changeEvent.newValue * Config.Step + Config.Min;
                         Config.Value = sum;
                         _label.text = $"{Config.LabelText}: {sum}";
                     }

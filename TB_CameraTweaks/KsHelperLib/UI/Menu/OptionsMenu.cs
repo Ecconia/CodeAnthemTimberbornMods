@@ -7,7 +7,7 @@ using Timberborn.Localization;
 using UnityEngine.UIElements;
 using static UnityEngine.UIElements.Length.Unit;
 
-namespace TB_CameraTweaks.UI
+namespace TB_CameraTweaks.KsHelperLib.UI.Menu
 {
     internal class OptionsMenu : IPanelController
     {
