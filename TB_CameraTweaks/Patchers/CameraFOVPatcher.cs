@@ -14,13 +14,13 @@ using UnityEngine.UIElements;
 
 namespace TB_CameraTweaks.Patchers
 {
-    internal class CameraZoomPatcher : ILoadableSingleton
+    internal class CameraFOVPatcher : ILoadableSingleton
     {
-        private static SliderOption ZoomFactor;
+        private static SliderOption FOV;
         private static ILoc Loc;
-        private static LogProxy Log = new("[Camera_ZoomPatcher] ");
+        private static LogProxy Log = new("[Camera_FOV] ");
 
-        public CameraZoomPatcher()
+        public CameraFOVPatcher()
         {
             UIRegister.AddUiElements += MenuElements;
         }
@@ -28,52 +28,45 @@ namespace TB_CameraTweaks.Patchers
         private static void SetupConfig()
         {
             var cfg = new SliderConfig(
-                key: "Zoom Factor",
-                description: "Camera Zoom Factor (vanilla: 2.5)",
-                min: 2.5f, max: 7f, def: 3f,
-                labelText: Loc.T($"{Plugin._tocTag}.menu.zoomfactor")
+                key: "FOV",
+                description: "Camera FOV (vanilla: 30)",
+                min: 30f, max: 90f, def: 55f,
+                labelText: Loc.T($"{Plugin._tocTag}.menu.fov")
             );
-            cfg.Step = 0.5f;
-            ZoomFactor = new SliderOption(cfg);
+            cfg.Step = 1.0f;
+            FOV = new SliderOption(cfg);
         }
 
         private static void MenuElements(VisualElementBuilder obj)
         {
-            ZoomFactor.Build(obj);
-            StaticLabels.FooterNote(obj, $"{Loc.T($"{Plugin._tocTag}.single.default")}: 2.5");
+            FOV.Build(obj);
+            StaticLabels.FooterNote(obj, $"{Loc.T($"{Plugin._tocTag}.single.default")}: 30");
         }
 
         public void Load()
         {
             Loc = DependencyContainer.GetInstance<ILoc>();
             SetupConfig();
-            CameraZoomPatch.Setup(); // Create instance
+            CameraFOVPatch.Setup(); // Create instance
         }
 
         [HarmonyPatch(typeof(CameraComponent), nameof(CameraComponent.ModifyZoomLevel))]
-        private class CameraZoomPatch
+        private class CameraFOVPatch
         {
-            private FloatLimits ModifiedZoomFactor;
             private static bool RequireUpdate = true;
-            public static CameraZoomPatch Instance;
+            public static CameraFOVPatch Instance;
 
             internal static void Setup()
             {
-                CameraZoomPatch patch = new CameraZoomPatch();
+                CameraFOVPatch patch = new CameraFOVPatch();
                 Instance = patch;
 
-                ZoomFactor.Config.Updated += Instance.ValueChanged;
-                Instance.UpdateZoomFactor();
+                FOV.Config.Updated += Instance.ValueChanged;
+                RequireUpdate = true;
             }
 
             private void ValueChanged(object sender, EventArgs e)
             {
-                UpdateZoomFactor();
-            }
-
-            private void UpdateZoomFactor()
-            {
-                ModifiedZoomFactor = new Timberborn.Common.FloatLimits(-2.5f, ZoomFactor.Config.Value);
                 RequireUpdate = true;
             }
 
@@ -81,7 +74,7 @@ namespace TB_CameraTweaks.Patchers
             {
                 if (RequireUpdate)
                 {
-                    __instance._defaultZoomLimits = Instance.ModifiedZoomFactor;
+                    __instance.FieldOfView = FOV.Config.Value;
                     RequireUpdate = false;
                     //Log.LogWarning($"Patch Executed. Value: {Instance.ModifiedZoomFactor.Max}");
                 }

@@ -9,6 +9,8 @@ namespace TB_CameraTweaks.Patchers
     {
         public void Configure(IContainerDefinition containerDefinition)
         {
+            containerDefinition.Bind<CameraFOVPatcher>().AsSingleton();
+            containerDefinition.Bind<CameraVerticalAngelLimiterPatcher>().AsSingleton();
             containerDefinition.Bind<CameraZoomPatcher>().AsSingleton();
         }
     }
