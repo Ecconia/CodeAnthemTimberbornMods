@@ -14,9 +14,9 @@ This mod for timberborn allows you to modify the in-game camera of the game. <im
 
 # Usage
  a) A config file to modify the settings in BepInEx/configs folder
- <br\>
+ <br/>
  **OR**
- <br\>
+ <br/>
  b) Better via the in-game settings menu
 
 ### In Game Menu Button:
