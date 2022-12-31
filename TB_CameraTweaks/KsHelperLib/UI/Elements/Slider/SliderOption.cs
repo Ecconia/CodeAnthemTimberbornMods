@@ -22,7 +22,7 @@ namespace TB_CameraTweaks.KsHelperLib.UI.Elements.Slider
 
         public SliderConfig Config { get; }
 
-        public void Build(VisualElementBuilder builder)
+        public void Build(VisualElementBuilder builder, bool buildFooter = false)
         {
             if (_lenght == null) SetLength();
 
@@ -33,6 +33,8 @@ namespace TB_CameraTweaks.KsHelperLib.UI.Elements.Slider
                 return;
             }
             MakeSmoothSlider(builder);
+
+            if (buildFooter) FooterNote(builder);
         }
 
         public void SetLength(int size = 10) => _lenght = new Length(size, LengthUnit.Pixel);
@@ -96,6 +98,17 @@ namespace TB_CameraTweaks.KsHelperLib.UI.Elements.Slider
                 ))
                 .AddPreset(factory => factory.Labels().GameTextSmall(text: $"Max: {Config.Max}"));
             });
+        }
+
+        private void FooterNote(VisualElementBuilder builder)
+        {
+            builder.AddPreset(factory => factory.Labels().GameTextSmall(text: Config.FooterText, builder: builder => builder.SetStyle(style =>
+            {
+                style.alignSelf = Align.Center;
+                style.fontSize = 12;
+                style.paddingBottom = 15;
+                style.marginTop = -10;
+            })));
         }
     }
 }

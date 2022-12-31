@@ -20,6 +20,7 @@ namespace TB_CameraTweaks.KsHelperLib.UI.Elements.CheckBox
         {
             //MakeLabel(builder);
             MakeCheckBox(builder);
+            FooterNote(builder);
         }
 
         private void MakeLabel(VisualElementBuilder builder)
@@ -43,6 +44,18 @@ namespace TB_CameraTweaks.KsHelperLib.UI.Elements.CheckBox
                     x.value = Config.Value;
                     x.RegisterValueChangedCallback(changeEvent => Config.Value = changeEvent.newValue);
                 })));
+        }
+
+        private void FooterNote(VisualElementBuilder builder)
+        {
+            builder.AddPreset(factory => factory.Labels().GameTextSmall(text: Config.FooterText, builder: builder => builder.SetStyle(style =>
+            {
+                style.alignSelf = Align.FlexStart;
+                style.fontSize = 12;
+                style.paddingBottom = 15;
+                style.marginTop = -3;
+                style.marginLeft = 2;
+            })));
         }
     }
 }

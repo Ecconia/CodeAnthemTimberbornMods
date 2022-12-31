@@ -38,7 +38,8 @@ namespace TB_CameraTweaks.Patchers
                 key: "Vertical Angel Limiter Factor",
                 description: "Disable Vertical Angel Limiter",
                 def: false,
-                labelText: Loc.T($"{Plugin._tocTag}.menu.VerticalLimiter")
+                labelText: Loc.T($"{Plugin._tocTag}.menu.VerticalLimiter"),
+                footerText: $"{Loc.T($"{Plugin._tocTag}.single.default")}: {Loc.T($"{Plugin._tocTag}.single.off")}"
             );
             VerticalAngelLimiter = new CheckBoxOption(cfg);
         }
@@ -46,7 +47,6 @@ namespace TB_CameraTweaks.Patchers
         private static void MenuElements(VisualElementBuilder obj)
         {
             VerticalAngelLimiter.Build(obj);
-            StaticLabels.FooterNote(obj, $"{Loc.T($"{Plugin._tocTag}.single.default")}: {Loc.T($"{Plugin._tocTag}.single.off")}", -5);
         }
 
         [HarmonyPatch(typeof(CameraVerticalAngleLimiter), nameof(CameraComponent.LateUpdate))]

@@ -5,7 +5,7 @@ namespace TB_CameraTweaks.KsHelperLib.UI.Elements.Slider
 {
     internal class SliderConfig
     {
-        public SliderConfig(string key, string description, float min, float max, float def, string labelText, float step = 0)
+        public SliderConfig(string key, string description, float min, float max, float def, string labelText, float step = 0, string footerText = " ")
         {
             Key = key;
             Description = description;
@@ -17,6 +17,7 @@ namespace TB_CameraTweaks.KsHelperLib.UI.Elements.Slider
             Default = def;
 
             LabelText = labelText;
+            FooterText = footerText;
 
             CreateConfigEntry();
         }
@@ -33,13 +34,15 @@ namespace TB_CameraTweaks.KsHelperLib.UI.Elements.Slider
             Updated?.Invoke(sender, e);
         }
 
-        public string Key { get; }
-        public string Description { get; }
-        public string LabelText { get; }
+        public string Key { get; set; }
+        public string Description { get; set; }
+        public string LabelText { get; set; }
+        public string FooterText { get; set; }
+
         public float Step { get; set; }
-        public float Min { get; }
-        public float Max { get; }
-        public float Default { get; }
+        public float Min { get; set; }
+        public float Max { get; set; }
+        public float Default { get; set; }
         public float Value { get => Config.Value; set => Config.Value = value; }
 
         public event EventHandler Updated;

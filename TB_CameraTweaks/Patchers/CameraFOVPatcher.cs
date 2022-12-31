@@ -31,7 +31,9 @@ namespace TB_CameraTweaks.Patchers
                 key: "FOV",
                 description: "Camera FOV (vanilla: 30)",
                 min: 30f, max: 90f, def: 55f,
-                labelText: Loc.T($"{Plugin._tocTag}.menu.fov")
+                labelText: Loc.T($"{Plugin._tocTag}.menu.fov"),
+                step: 1.0f,
+                footerText: $"{Loc.T($"{Plugin._tocTag}.single.default")}: 30"
             );
             cfg.Step = 1.0f;
             FOV = new SliderOption(cfg);
@@ -39,8 +41,7 @@ namespace TB_CameraTweaks.Patchers
 
         private static void MenuElements(VisualElementBuilder obj)
         {
-            FOV.Build(obj);
-            StaticLabels.FooterNote(obj, $"{Loc.T($"{Plugin._tocTag}.single.default")}: 30");
+            FOV.Build(obj, true);
         }
 
         public void Load()

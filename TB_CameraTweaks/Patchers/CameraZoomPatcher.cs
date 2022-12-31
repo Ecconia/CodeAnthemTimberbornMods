@@ -31,7 +31,8 @@ namespace TB_CameraTweaks.Patchers
                 key: "Zoom Factor",
                 description: "Camera Zoom Factor (vanilla: 2.5)",
                 min: 2.5f, max: 7f, def: 3f,
-                labelText: Loc.T($"{Plugin._tocTag}.menu.zoomfactor")
+                labelText: Loc.T($"{Plugin._tocTag}.menu.zoomfactor"),
+                footerText: $"{Loc.T($"{Plugin._tocTag}.single.default")}: 2.5"
             );
             cfg.Step = 0.5f;
             ZoomFactor = new SliderOption(cfg);
@@ -39,8 +40,7 @@ namespace TB_CameraTweaks.Patchers
 
         private static void MenuElements(VisualElementBuilder obj)
         {
-            ZoomFactor.Build(obj);
-            StaticLabels.FooterNote(obj, $"{Loc.T($"{Plugin._tocTag}.single.default")}: 2.5");
+            ZoomFactor.Build(obj, true);
         }
 
         public void Load()
