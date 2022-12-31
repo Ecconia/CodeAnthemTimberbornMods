@@ -1,6 +1,6 @@
 # K's Camera Tweaker For Timberborn
-![Icon](https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaks/icon.png)
 This mod for timberborn allows you to modify the in-game camera of the game.
+![Icon](https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaks/icon.png)
 
 
 # Features:
