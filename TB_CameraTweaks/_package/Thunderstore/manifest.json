@@ -1,0 +1,10 @@
+{
+    "name": "Camera_Tweaker",
+    "version_number": "1.0.0",
+    "website_url": "https://github.com/averon420/Timberborn_Mods",
+    "description": "Mod to tweak the in-game camera.",
+    "dependencies": [
+        "BepInEx-BepInExPack_Timberborn-5.4.19",
+		"Timberborn_Central-TimberAPI-0.5.1"
+    ]
+}

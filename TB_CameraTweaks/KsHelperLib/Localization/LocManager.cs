@@ -9,19 +9,19 @@ using Timberborn.SingletonSystem;
 
 namespace TB_CameraTweaks.KsHelperLib.Localization
 {
-    internal class TocManager : ILoadableSingleton
+    internal class LocManager : ILoadableSingleton
 
     {
-        private readonly TocLangFileHandler FileHandler;
-        private readonly Dictionary<string, IEnumerable<TocEntryModel>> PredefinedLanguages = new Dictionary<string, IEnumerable<TocEntryModel>>();
+        private readonly LocLangFileHandler FileHandler;
+        private readonly Dictionary<string, IEnumerable<LocEntryModel>> PredefinedLanguages = new Dictionary<string, IEnumerable<LocEntryModel>>();
         private bool Initialized;
         private string LangDirPath;
         private List<string> AllLanguageTags = new List<string>();
-        private LogProxy Log = new LogProxy("TocManager ", LogLevel.None);
+        private LogProxy Log = new LogProxy("LocManager ", LogLevel.None);
 
-        public TocManager()
+        public LocManager()
         {
-            FileHandler = new TocLangFileHandler();
+            FileHandler = new LocLangFileHandler();
         }
 
         public void Load()
@@ -64,11 +64,11 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
             {
                 var l = (ILanguage)Activator.CreateInstance(language);
 
-                List<TocEntryModel> entriesWithTag = new List<TocEntryModel>();
+                List<LocEntryModel> entriesWithTag = new List<LocEntryModel>();
                 foreach (var entry in l.GetEntries())
                 {
-                    string keyWithTag = TocConfig.TocTag + "." + entry.Key;
-                    TocEntryModel fixedEntry = new TocEntryModel(keyWithTag, entry.Text, entry.Comment);
+                    string keyWithTag = LocConfig.LocTag + "." + entry.Key;
+                    LocEntryModel fixedEntry = new LocEntryModel(keyWithTag, entry.Text, entry.Comment);
                     entriesWithTag.Add(fixedEntry);
                 }
                 bool successfullyAdded = PredefinedLanguages.TryAdd(l.Tag, entriesWithTag);
@@ -79,7 +79,7 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
 
         private void GetAllLanguageTags()
         {
-            AllLanguageTags.Add(TocConfig.DefaultLanguage);
+            AllLanguageTags.Add(LocConfig.DefaultLanguage);
             Log.LogDebug($"Total Language Tags: {AllLanguageTags.Count} - Added Default");
 
             foreach (var predefinedLanguage in PredefinedLanguages)
@@ -90,7 +90,7 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
             }
             Log.LogDebug($"Total Language Tags: {AllLanguageTags.Count} - Added Predefined");
 
-            foreach (var additionalLanguage in TocConfig.GetLanguages())
+            foreach (var additionalLanguage in LocConfig.GetLanguages())
             {
                 if (AllLanguageTags.Contains(additionalLanguage)) continue;
                 AllLanguageTags.Add(additionalLanguage);
@@ -101,8 +101,8 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
 
         private void CheckIfDefaultLanguageIsFound()
         {
-            if (PredefinedLanguages.ContainsKey(TocConfig.DefaultLanguage)) return;
-            throw new Exception($"Default language {TocConfig.DefaultLanguage} is missing the predefined language, add a new class with the <ILanguage> interface");
+            if (PredefinedLanguages.ContainsKey(LocConfig.DefaultLanguage)) return;
+            throw new Exception($"Default language {LocConfig.DefaultLanguage} is missing the predefined language, add a new class with the <ILanguage> interface");
         }
 
         private void CheckFile(string langTag)
@@ -123,12 +123,12 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
             else
             {
                 Log.LogDebug("CheckFile, Predefined Language Doesn't Exist");
-                var updatedEntries = PredefinedLanguages[TocConfig.DefaultLanguage];
+                var updatedEntries = PredefinedLanguages[LocConfig.DefaultLanguage];
                 VerifyLangFileContent(langFile, updatedEntries, false);
             }
         }
 
-        private void VerifyLangFileContent(FileInfo langFile, IEnumerable<TocEntryModel> updatedEntries, bool writeComments = false)
+        private void VerifyLangFileContent(FileInfo langFile, IEnumerable<LocEntryModel> updatedEntries, bool writeComments = false)
         {
             //Log.LogDebug("VerifyLangFileContent, Get Current Content");
             //foreach (var item in updatedEntries)
@@ -143,7 +143,7 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
             //}
 
             bool inconsistent = false;
-            List<TocEntryModel> newEntries = new List<TocEntryModel>();
+            List<LocEntryModel> newEntries = new List<LocEntryModel>();
 
             foreach (var currentEntry in currentEntries)
             {
@@ -162,11 +162,11 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
 
             foreach (var updatedEntry in updatedEntries)
             {
-                TocEntryModel newEntry = newEntries.FirstOrDefault(x => x.Key == updatedEntry.Key);
+                LocEntryModel newEntry = newEntries.FirstOrDefault(x => x.Key == updatedEntry.Key);
                 if (newEntry != default) continue;
 
-                if (writeComments) newEntries.Add(new TocEntryModel(updatedEntry.Key, updatedEntry.Text, updatedEntry.Comment));
-                else newEntries.Add(new TocEntryModel(updatedEntry.Key, updatedEntry.Text, string.Empty));
+                if (writeComments) newEntries.Add(new LocEntryModel(updatedEntry.Key, updatedEntry.Text, updatedEntry.Comment));
+                else newEntries.Add(new LocEntryModel(updatedEntry.Key, updatedEntry.Text, string.Empty));
                 inconsistent = true;
             }
             //foreach (var item in newEntries)
@@ -177,7 +177,7 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
             if (inconsistent) WriteUpdateToFile(langFile, newEntries);
         }
 
-        private void WriteUpdateToFile(FileInfo langFile, IEnumerable<TocEntryModel> updatedEntries)
+        private void WriteUpdateToFile(FileInfo langFile, IEnumerable<LocEntryModel> updatedEntries)
         {
             var sortedNewEntries = updatedEntries.OrderBy(x => x.Key).ToList();
             FileHandler.WriteUpdatedContent(langFile, sortedNewEntries);

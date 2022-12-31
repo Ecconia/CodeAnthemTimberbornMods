@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System;
+using TB_CameraTweaks.KsHelperLib.Localization;
 using TB_CameraTweaks.KsHelperLib.Logger;
 using TB_CameraTweaks.KsHelperLib.UI.Elements.Labels;
 using TB_CameraTweaks.KsHelperLib.UI.Elements.Slider;
@@ -31,9 +32,9 @@ namespace TB_CameraTweaks.Patchers
                 key: "FOV",
                 description: "Camera FOV (vanilla: 30)",
                 min: 30f, max: 90f, def: 55f,
-                labelText: Loc.T($"{Plugin._tocTag}.menu.fov"),
+                labelText: Loc.T($"{LocConfig.LocTag}.menu.fov"),
                 step: 1.0f,
-                footerText: $"{Loc.T($"{Plugin._tocTag}.single.default")}: 30"
+                footerText: $"{Loc.T($"{LocConfig.LocTag}.single.original")}: 30"
             );
             cfg.Step = 1.0f;
             FOV = new SliderOption(cfg);

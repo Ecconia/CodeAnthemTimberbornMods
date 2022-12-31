@@ -15,7 +15,6 @@ namespace TB_CameraTweaks
         public const string _pluginId = "Kumare." + MyPluginInfo.PLUGIN_NAME;
 
         internal new static ConfigFile Config;
-        internal static string _tocTag = $"{MyPluginInfo.PLUGIN_NAME.ToLower()}";
         internal static LogProxy Log;
         private static Harmony _harmony;
 
@@ -24,7 +23,7 @@ namespace TB_CameraTweaks
             SetupLogger();
             Config = base.Config;
             Config.SaveOnConfigSet = true;
-            SetupTOC();
+            SetupLOC();
             _harmony = new Harmony(_pluginId);
         }
 
@@ -44,10 +43,10 @@ namespace TB_CameraTweaks
 #endif
         }
 
-        private void SetupTOC()
+        private void SetupLOC()
         {
-            TocConfig.AddAdditionalLanguage("deDE");
-            TocConfig.Header = new List<string>()
+            LocConfig.AddAdditionalLanguage("deDE");
+            LocConfig.Header = new List<string>()
             {
                 $"{MyPluginInfo.PLUGIN_NAME}, Updated: {DateTime.Now}",
                 "============================================"
@@ -60,7 +59,7 @@ namespace TB_CameraTweaks
         //    Config = base.Config;
         //    Config.SaveOnConfigSet = true;
 
-        // SetupTOC();
+        // SetupLOC();
 
         // _harmony = new Harmony(_pluginId); _harmony.PatchAll();
 

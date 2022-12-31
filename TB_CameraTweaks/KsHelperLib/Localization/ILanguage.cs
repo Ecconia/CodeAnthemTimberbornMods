@@ -6,6 +6,6 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
     {
         string Tag { get; }
 
-        IEnumerable<TocEntryModel> GetEntries();
+        IEnumerable<LocEntryModel> GetEntries();
     }
 }

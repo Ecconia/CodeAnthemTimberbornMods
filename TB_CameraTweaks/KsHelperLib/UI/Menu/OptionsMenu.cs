@@ -1,4 +1,5 @@
 ﻿using System;
+using TB_CameraTweaks.KsHelperLib.Localization;
 using TimberApi.DependencyContainerSystem;
 using TimberApi.UiBuilderSystem;
 using TimberApi.UiBuilderSystem.ElementSystem;
@@ -47,7 +48,7 @@ namespace TB_CameraTweaks.KsHelperLib.UI.Menu
             boxBuilder.AddComponent(menuContent.Build());
 
             var loc = DependencyContainer.GetInstance<ILoc>();
-            string menuTitle = loc.T($"{Plugin._tocTag}.menu.title");
+            string menuTitle = loc.T($"{LocConfig.LocTag}.menu.title");
 
             VisualElement root = boxBuilder.AddCloseButton("CloseButton").SetBoxInCenter().AddHeader(null,
                 $"{menuTitle} v" + MyPluginInfo.PLUGIN_VERSION).BuildAndInitialize();
@@ -63,7 +64,7 @@ namespace TB_CameraTweaks.KsHelperLib.UI.Menu
         private static void AddOptionsTitle(VisualElementBuilder menuContent)
         {
             menuContent.AddPreset(factory => factory.Labels().DefaultHeader(
-                $"{Plugin._tocTag}.menu.options",
+                $"{LocConfig.LocTag}.menu.options",
                 builder: builder => builder.SetStyle(
                     style =>
                     {

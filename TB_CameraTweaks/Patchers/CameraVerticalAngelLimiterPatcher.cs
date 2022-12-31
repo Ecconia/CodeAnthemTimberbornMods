@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System;
+using TB_CameraTweaks.KsHelperLib.Localization;
 using TB_CameraTweaks.KsHelperLib.Logger;
 using TB_CameraTweaks.KsHelperLib.UI.Elements.CheckBox;
 using TB_CameraTweaks.KsHelperLib.UI.Elements.Labels;
@@ -38,8 +39,8 @@ namespace TB_CameraTweaks.Patchers
                 key: "Vertical Angel Limiter Factor",
                 description: "Disable Vertical Angel Limiter",
                 def: false,
-                labelText: Loc.T($"{Plugin._tocTag}.menu.VerticalLimiter"),
-                footerText: $"{Loc.T($"{Plugin._tocTag}.single.default")}: {Loc.T($"{Plugin._tocTag}.single.off")}"
+                labelText: Loc.T(key: $"{LocConfig.LocTag}.menu.VerticalLimiter"),
+                footerText: $"{Loc.T($"{LocConfig.LocTag}.single.original")}: {Loc.T($"{LocConfig.LocTag}.single.off")}"
             );
             VerticalAngelLimiter = new CheckBoxOption(cfg);
         }

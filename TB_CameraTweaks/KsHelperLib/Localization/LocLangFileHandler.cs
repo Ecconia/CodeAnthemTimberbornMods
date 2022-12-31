@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace TB_CameraTweaks.KsHelperLib.Localization
 {
-    internal class TocLangFileHandler
+    internal class LocLangFileHandler
     {
-        internal void WriteUpdatedContent(FileInfo langFile, List<TocEntryModel> currentEntries)
+        internal void WriteUpdatedContent(FileInfo langFile, List<LocEntryModel> currentEntries)
         {
             if (langFile.Exists) { langFile.Delete(); }
 
@@ -17,7 +17,7 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
                 {
                     tw.WriteLine("ID,Text,Comment");
 
-                    foreach (var headerLine in TocConfig.Header)
+                    foreach (var headerLine in LocConfig.Header)
                     {
                         tw.WriteLine(headerLine);
                     }
@@ -35,9 +35,9 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
             }
         }
 
-        internal List<TocEntryModel> GetCurrentContent(FileInfo langFile)
+        internal List<LocEntryModel> GetCurrentContent(FileInfo langFile)
         {
-            List<TocEntryModel> currentEntries = new();
+            List<LocEntryModel> currentEntries = new();
             if (!langFile.Exists) return currentEntries;
 
             var lines = File.ReadAllLines(langFile.FullName);
@@ -46,7 +46,7 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
             {
                 string line = lines[i];
 
-                if (i <= TocConfig.Header.Count) continue;
+                if (i <= LocConfig.Header.Count) continue;
 
                 if (!string.IsNullOrEmpty(line) && line.Contains(","))
                 {
@@ -54,11 +54,11 @@ namespace TB_CameraTweaks.KsHelperLib.Localization
                     switch (parts.Length)
                     {
                         case 2:
-                            currentEntries.Add(new TocEntryModel(parts[0], parts[1].Trim(), string.Empty));
+                            currentEntries.Add(new LocEntryModel(parts[0], parts[1].Trim(), string.Empty));
                             break;
 
                         case 3:
-                            currentEntries.Add(new TocEntryModel(parts[0], parts[1].Trim(), parts[2].Trim()));
+                            currentEntries.Add(new LocEntryModel(parts[0], parts[1].Trim(), parts[2].Trim()));
                             break;
 
                         default:

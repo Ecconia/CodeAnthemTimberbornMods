@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using TB_CameraTweaks.KsHelperLib.Localization;
 using TimberApi.DependencyContainerSystem;
 using Timberborn.Localization;
 using Timberborn.MainMenuScene;
@@ -17,7 +18,7 @@ namespace TB_CameraTweaks.KsHelperLib.UI.Menu
                 var loc = DependencyContainer.GetInstance<ILoc>();
                 VisualElement root = __result.Query("OptionsBox");
                 Button button = new Button() { classList = { "menu-button" } };
-                button.text = loc.T($"{Plugin._tocTag}.menu.title");
+                button.text = loc.T($"{LocConfig.LocTag}.menu.title");
                 button.clicked += OptionsMenu.OpenOptionsDelegate;
                 root.Insert(6, button);
             }
@@ -34,7 +35,7 @@ namespace TB_CameraTweaks.KsHelperLib.UI.Menu
                 var loc = DependencyContainer.GetInstance<ILoc>();
                 VisualElement root = __result.Query("MainMenuPanel");
                 Button button = new Button() { classList = { "menu-button" } };
-                button.text = loc.T($"{Plugin._tocTag}.menu.title");
+                button.text = loc.T($"{LocConfig.LocTag}.menu.title");
                 button.clicked += OptionsMenu.OpenOptionsDelegate;
                 root.Insert(6, button);
             }

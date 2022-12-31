@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System;
+using TB_CameraTweaks.KsHelperLib.Localization;
 using TB_CameraTweaks.KsHelperLib.Logger;
 using TB_CameraTweaks.KsHelperLib.UI.Elements.Labels;
 using TB_CameraTweaks.KsHelperLib.UI.Elements.Slider;
@@ -31,8 +32,8 @@ namespace TB_CameraTweaks.Patchers
                 key: "Zoom Factor",
                 description: "Camera Zoom Factor (vanilla: 2.5)",
                 min: 2.5f, max: 7f, def: 3f,
-                labelText: Loc.T($"{Plugin._tocTag}.menu.zoomfactor"),
-                footerText: $"{Loc.T($"{Plugin._tocTag}.single.default")}: 2.5"
+                labelText: Loc.T($"{LocConfig.LocTag}.menu.zoomfactor"),
+                footerText: $"{Loc.T($"{LocConfig.LocTag}.single.original")}: 2.5"
             );
             cfg.Step = 0.5f;
             ZoomFactor = new SliderOption(cfg);

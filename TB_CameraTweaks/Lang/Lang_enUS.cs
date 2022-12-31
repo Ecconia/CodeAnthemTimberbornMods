@@ -7,18 +7,19 @@ namespace TB_CameraTweaks.Lang
     {
         public string Tag => "enUS";
 
-        public IEnumerable<TocEntryModel> GetEntries()
+        public IEnumerable<LocEntryModel> GetEntries()
         {
-            return new List<TocEntryModel>()
+            return new List<LocEntryModel>()
             {
-                new TocEntryModel("menu.title", "Camera Tweaker", "Title of menu" ),
-                new TocEntryModel("menu.options", "Options", "Options header of menu" ),
-                new TocEntryModel("menu.zoomfactor", "Zoom Factor", "Header of option: Zoom Factor" ),
-                new TocEntryModel("menu.VerticalLimiter", "Disable Automatic Camera Snap Back", "Header of option: Vertical Angel Limiter" ),
-                new TocEntryModel("menu.fov", "Field Of View", "Header of option: FOV" ),
-                new TocEntryModel("single.default", "Default" ),
-                new TocEntryModel("single.on", "On" ),
-                new TocEntryModel("single.off", "Off" ),
+                new LocEntryModel("menu.title", "Camera Tweaker", "Title of menu" ),
+                new LocEntryModel("menu.options", "Options", "Options header of menu" ),
+                new LocEntryModel("menu.zoomfactor", "Zoom Factor", "Header of option: Zoom Factor" ),
+                new LocEntryModel("menu.VerticalLimiter", "Disable Automatic Camera Snap Back", "Header of option: Vertical Angel Limiter" ),
+                new LocEntryModel("menu.fov", "Field Of View", "Header of option: FOV" ),
+                new LocEntryModel("single.default", "Default" ),
+                new LocEntryModel("single.original", "Original" ),
+                new LocEntryModel("single.on", "On" ),
+                new LocEntryModel("single.off", "Off" ),
             };
         }
     }

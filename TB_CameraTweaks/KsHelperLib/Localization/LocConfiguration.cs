@@ -5,11 +5,11 @@ using TimberApi.SceneSystem;
 namespace TB_CameraTweaks.KsHelperLib.Localization
 {
     [Configurator(SceneEntrypoint.MainMenu)]
-    internal class TocConfiguration : IConfigurator
+    internal class LocConfiguration : IConfigurator
     {
         public void Configure(IContainerDefinition containerDefinition)
         {
-            containerDefinition.Bind<TocManager>().AsSingleton();
+            containerDefinition.Bind<LocManager>().AsSingleton();
         }
     }
 }
