@@ -17,10 +17,10 @@ Disabled Camera Snap Back: (Camera doesn't reset)
  **OR**
  b) Better via the in-game settings menu
 
-##In Game Menu Button:
+## In Game Menu Button:
 ![InGameMenuButton](https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaks/_package/Pictures/InGameMenuButton.png)
 
-###Options Menu:
+### Options Menu:
 ![InGameOptionsMenu](https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaks/_package/Pictures/InGameOptionsMenu.png)
 
 
