@@ -2,8 +2,6 @@
 This mod for timberborn allows you to modify the in-game camera of the game.
 <br/>
 <img src="https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaks/icon.png" width="200" />
-![Icon](https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaks/icon.png)
-
 
 # Features:
 > - Change Field of view (FOV)
@@ -11,10 +9,10 @@ This mod for timberborn allows you to modify the in-game camera of the game.
 > - Disable Camera Snap-back feature
 
 ### Changed Camera: (even more possible)
-<img src="https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaks/_package/Pictures/InGameZoomedOut.png" width="600" />
+<img src="https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaks/_package/Pictures/InGameZoomedOut.png" width="800" />
 
 ### Disabled Camera Snap Back: (Camera doesn't reset)
-<img src="https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaks/_package/Pictures/InGameNoSnapBackCamera.png" width="600" />
+<img src="https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaks/_package/Pictures/InGameNoSnapBackCamera.png" width="800" />
 
 # Usage
  a) A config file to modify the settings in BepInEx/configs folder
