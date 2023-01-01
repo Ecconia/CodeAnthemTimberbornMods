@@ -30,7 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="_package\Pictures\" />
+		<Folder Include="_package\Pictures\" />
 	</ItemGroup>
 
 	<!--<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
@@ -39,9 +39,7 @@
 
 	<!--COPY ON BUILD TO TARGET-->
 	<Target Name="CopyToBepInExPlugins" AfterTargets="Build">
-		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(TB_CameraTweaks)" />
-		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(TB_CameraTweaks2)" />
-		<!--<Copy SourceFiles="$(TargetDir)\$(TargetName).pdb" DestinationFolder="$(TB_CameraTweaks)" />-->
+		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(TB_CameraTweaker)" />
 	</Target>
 
 	<!-- COPY ON BUILD TO TARGET -->
