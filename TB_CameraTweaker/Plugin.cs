@@ -1,4 +1,5 @@
-﻿using BepInEx;
+﻿// Revange of the dwarves - Test Header
+using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
 using System;
@@ -18,8 +19,7 @@ namespace TB_CameraTweaker
         internal static LogProxy Log;
         private static Harmony _harmony;
 
-        public Plugin()
-        {
+        public Plugin() {
             SetupLogger();
             Config = base.Config;
             Config.SaveOnConfigSet = true;
@@ -27,14 +27,12 @@ namespace TB_CameraTweaker
             _harmony = new Harmony(_pluginId);
         }
 
-        private void Awake()
-        {
+        private void Awake() {
             _harmony.PatchAll();
             Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
         }
 
-        private void SetupLogger()
-        {
+        private void SetupLogger() {
             Log = new("[Core] ");
             LogProxy.Level = BepInEx.Logging.LogLevel.Warning;
             LogProxy._logger = Logger;
@@ -43,13 +41,12 @@ namespace TB_CameraTweaker
 #endif
         }
 
-        private void SetupLOC()
-        {
+        private void SetupLOC() {
             LocConfig.AddAdditionalLanguage("deDE");
             LocConfig.Header = new List<string>()
             {
                 $"{MyPluginInfo.PLUGIN_NAME}, Updated: {DateTime.Now}",
-                "============================================"
+                ""
             };
         }
 
