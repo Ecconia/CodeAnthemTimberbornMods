@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿// Revange of the dwarves - Test Header
+using HarmonyLib;
 using System;
 using TB_CameraTweaker.KsHelperLib.Localization;
 using TB_CameraTweaker.KsHelperLib.Logger;
@@ -19,13 +20,11 @@ namespace TB_CameraTweaker.Patchers
         private static ILoc Loc;
         private static LogProxy Log = new("[Camera_ZoomPatcher] ");
 
-        public CameraZoomPatcher()
-        {
+        public CameraZoomPatcher() {
             UIRegister.AddUiElements += MenuElements;
         }
 
-        private static void SetupConfig()
-        {
+        private static void SetupConfig() {
             var cfg = new SliderConfig(
                 key: "Zoom Factor",
                 description: "Camera Zoom Factor (vanilla: 2.5)",
@@ -37,13 +36,11 @@ namespace TB_CameraTweaker.Patchers
             ZoomFactor = new SliderOption(cfg);
         }
 
-        private static void MenuElements(VisualElementBuilder obj)
-        {
+        private static void MenuElements(VisualElementBuilder obj) {
             ZoomFactor.Build(obj, true);
         }
 
-        public void Load()
-        {
+        public void Load() {
             Loc = DependencyContainer.GetInstance<ILoc>();
             SetupConfig();
             CameraZoomPatch.Setup(); // Create instance
@@ -56,8 +53,7 @@ namespace TB_CameraTweaker.Patchers
             private static bool RequireUpdate = true;
             public static CameraZoomPatch Instance;
 
-            internal static void Setup()
-            {
+            internal static void Setup() {
                 CameraZoomPatch patch = new CameraZoomPatch();
                 Instance = patch;
 
@@ -65,22 +61,19 @@ namespace TB_CameraTweaker.Patchers
                 Instance.UpdateZoomFactor();
             }
 
-            private void ValueChanged(object sender, EventArgs e)
-            {
+            private void ValueChanged(object sender, EventArgs e) {
                 UpdateZoomFactor();
             }
 
-            private void UpdateZoomFactor()
-            {
+            private void UpdateZoomFactor() {
                 ModifiedZoomFactor = new FloatLimits(-2.5f, ZoomFactor.Config.Value);
                 RequireUpdate = true;
             }
 
-            public static void Postfix(CameraComponent __instance)
-            {
-                if (RequireUpdate)
-                {
+            public static void Postfix(CameraComponent __instance) {
+                if (RequireUpdate) {
                     __instance._defaultZoomLimits = Instance.ModifiedZoomFactor;
+                    __instance._relaxedZoomLimits = Instance.ModifiedZoomFactor;
                     RequireUpdate = false;
                     //Log.LogWarning($"Patch Executed. Value: {Instance.ModifiedZoomFactor.Max}");
                 }
