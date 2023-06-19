@@ -1,22 +1,21 @@
-﻿// Revange of the dwarves - Test Header
-using BepInEx;
+﻿using BepInEx;
 using BepInEx.Configuration;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using TB_CameraTweaker.CameraPositionSaveSystem;
 using TB_CameraTweaker.KsHelperLib.Localization;
 using TB_CameraTweaker.KsHelperLib.Logger;
 
 namespace TB_CameraTweaker
 {
-    [BepInPlugin(_pluginId, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin("Kumare." + MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     [HarmonyPatch]
     public class Plugin : BaseUnityPlugin
     {
-        public const string _pluginId = "Kumare." + MyPluginInfo.PLUGIN_NAME;
-
         internal new static ConfigFile Config;
         internal static LogProxy Log;
+        internal static CameraPositionSaveSystemCore _cameraPositionSaveSystem;
         private static Harmony _harmony;
 
         public Plugin() {
@@ -24,7 +23,8 @@ namespace TB_CameraTweaker
             Config = base.Config;
             Config.SaveOnConfigSet = true;
             SetupLOC();
-            _harmony = new Harmony(_pluginId);
+            _cameraPositionSaveSystem = new CameraPositionSaveSystemCore();
+            _harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         }
 
         private void Awake() {
