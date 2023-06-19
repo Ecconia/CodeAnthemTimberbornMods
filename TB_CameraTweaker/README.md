@@ -4,36 +4,29 @@ This mod for timberborn allows you to modify the in-game camera of the game. <im
 # Features:
 > - Change Field of view (FOV)
 > - Change Camera Zoom Factor
-> - Disable Camera Snap-back feature
+> - ~~~Disable Camera Snap-back feature~~~ (removed, use "Unlock Camera" of build in game settings)
 
 ### Changed Camera: (even more possible)
-<img src="https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaker/_package/Pictures/InGameZoomedOut.png" width="800" />
-
-### Disabled Camera Snap Back: (Camera doesn't reset)
-<img src="https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaker/_package/Pictures/InGameNoSnapBackCamera.png" width="800" />
-
-# Usage
- a) A config file to modify the settings in BepInEx/configs folder
- <br/>
- **OR**
- <br/>
- b) Better via the in-game settings menu
-
-### In Game Menu Button:
-![InGameMenuButton](https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaker/_package/Pictures/InGameMenuButton.png)
-
-### Options Menu:
-![InGameOptionsMenu](https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaker/_package/Pictures/InGameOptionsMenu.png)
+<img src="https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaker/_package/Logo/Presentation Logo.png" width="800" />
 
 
-# Installing 
+
+# Check platforms for more info:
+
+## Installing 
 - Via [Thunderstore](https://timberborn.thunderstore.io/) (only uploaded version 1.0.1)
 - Via [Mod.io](https://mod.io/g/timberborn?tags-in=Mod)
 
-## Dependencies
-This plugin is dependent on the magnificent [TimberAPI](https://github.com/Timberborn-Modding-Central/TimberAPI).
-
 # Changelog
+
+## v1.0.4 - 19.06.2023
+- Removed "Camera Snap Back" Feature, since its build in now
+
+## v1.0.3 - 18.06.2023
+- Fixed camera tweaks not working when UI was hidden
+
+## v1.0.2 - 18.06.2023
+- Fixed Lang files for update 4
 
 ## v1.0.1 - 01.01.2023
 - Fixed Lang files
