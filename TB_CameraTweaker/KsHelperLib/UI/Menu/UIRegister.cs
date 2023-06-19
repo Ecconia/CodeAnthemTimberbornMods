@@ -15,5 +15,10 @@ namespace TB_CameraTweaker.KsHelperLib.UI.Menu
         public static void UpdateCallers(VisualElementBuilder builder) => AddUiElements?.Invoke(builder);
 
         public static void UpdateCallers(VisualElement root) => AddUiLogic?.Invoke(root);
+
+        public static void ResetCallers() {
+            AddUiLogic = null;
+            AddUiElements = null;
+        }
     }
 }
