@@ -7,10 +7,9 @@ namespace TB_CameraTweaker.Patchers
     [Configurator(SceneEntrypoint.MainMenu)]
     internal class PatchConfigurator : IConfigurator
     {
-        public void Configure(IContainerDefinition containerDefinition)
-        {
+        public void Configure(IContainerDefinition containerDefinition) {
             containerDefinition.Bind<CameraFOVPatcher>().AsSingleton();
-            containerDefinition.Bind<CameraVerticalAngelLimiterPatcher>().AsSingleton();
+            //containerDefinition.Bind<CameraVerticalAngelLimiterPatcher>().AsSingleton();
             containerDefinition.Bind<CameraZoomPatcher>().AsSingleton();
         }
     }
