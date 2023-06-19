@@ -1,19 +1,13 @@
 # K's Camera Tweaker For Timberborn
 This mod for timberborn allows you to modify the in-game camera of the game. <img src="https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaker/icon.png" width="100" />
+<img src="https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaker/_package/Logo/Presentation Logo.png" width="800" />
 
 # Features:
 > - Change Field of view (FOV)
 > - Change Camera Zoom Factor
-> - ~~~Disable Camera Snap-back feature~~~ (removed, use "Unlock Camera" of build in game settings)
-
-### Changed Camera: (even more possible)
-<img src="https://raw.githubusercontent.com/averon420/Timberborn_Mods/master/TB_CameraTweaker/_package/Logo/Presentation Logo.png" width="800" />
-
-
+> - ~~Disable Camera Snap-back feature~~ (removed, use "Unlock Camera" of build in game settings)
 
 # Check platforms for more info:
-
-## Installing 
 - Via [Thunderstore](https://timberborn.thunderstore.io/) (only uploaded version 1.0.1)
 - Via [Mod.io](https://mod.io/g/timberborn?tags-in=Mod)
 
