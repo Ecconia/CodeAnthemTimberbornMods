@@ -5,8 +5,7 @@ namespace TB_CameraTweaker.KsHelperLib.UI.Elements.CheckBox
 {
     internal class CheckBoxConfig
     {
-        public CheckBoxConfig(string key, string description, bool def, string labelText, string footerText = " ")
-        {
+        public CheckBoxConfig(string key, string description, bool def, string labelText, string footerText = " ") {
             Key = key;
             Description = description;
 
@@ -18,16 +17,14 @@ namespace TB_CameraTweaker.KsHelperLib.UI.Elements.CheckBox
             CreateConfigEntry();
         }
 
-        private void CreateConfigEntry()
-        {
+        private void CreateConfigEntry() {
             ConfigDescription desc = new ConfigDescription(Description);
             Config = Plugin.Config.Bind(MyPluginInfo.PLUGIN_NAME, Key, Default, desc);
             Config.SettingChanged += SettingChanged;
         }
 
-        private void SettingChanged(object sender, EventArgs e)
-        {
-            Updated?.Invoke(sender, e);
+        private void SettingChanged(object sender, EventArgs e) {
+            Updated?.Invoke();
         }
 
         public string Key { get; set; }
@@ -37,7 +34,7 @@ namespace TB_CameraTweaker.KsHelperLib.UI.Elements.CheckBox
         public bool Default { get; set; }
         public bool Value { get => Config.Value; set => Config.Value = value; }
 
-        public event EventHandler Updated;
+        public event Action Updated;
 
         private ConfigEntry<bool> Config { get; set; }
     }
