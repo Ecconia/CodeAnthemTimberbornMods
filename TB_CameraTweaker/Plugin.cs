@@ -15,7 +15,7 @@ namespace TB_CameraTweaker
     {
         internal new static ConfigFile Config;
         internal static LogProxy Log;
-        internal static CameraPositionSaveSystemCore _cameraPositionSaveSystem;
+        internal static CameraPositionCore _cameraPositionSaveSystem;
         private static Harmony _harmony;
 
         public Plugin() {
@@ -23,7 +23,7 @@ namespace TB_CameraTweaker
             Config = base.Config;
             Config.SaveOnConfigSet = true;
             SetupLOC();
-            _cameraPositionSaveSystem = new CameraPositionSaveSystemCore();
+            _cameraPositionSaveSystem = new CameraPositionCore();
             _harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         }
 

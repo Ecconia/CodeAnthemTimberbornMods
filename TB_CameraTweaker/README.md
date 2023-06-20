@@ -13,8 +13,11 @@ This mod for timberborn allows you to modify the in-game camera of the game. <im
 
 # Changelog
 
+## v1.1.0 - ???
+- Added "Camera Position Save" feature
+
 ## v1.0.4 - 19.06.2023
-- Removed "Camera Snap Back" Feature, since its build in now
+- Removed "Camera Snap Back" feature, since its build in now
 
 ## v1.0.3 - 18.06.2023
 - Fixed camera tweaks not working when UI was hidden
