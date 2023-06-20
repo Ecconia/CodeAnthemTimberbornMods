@@ -24,7 +24,7 @@ namespace TB_CameraTweaker.CameraPositionSaveSystem
             ICameraPositionSaver saver = new CameraPositionSaverJson(saveFile);
             _store = new CameraPositionStore(saver);
 
-            AddDummyData();
+            //AddDummyData();
 
             //_cameraSaveSystem.ListChanged += () => RefreshCameraPositionRows();
             //RefreshCameraPositionRows();
@@ -36,6 +36,15 @@ namespace TB_CameraTweaker.CameraPositionSaveSystem
         }
 
         private void AddUIElements(VisualElementBuilder builder) {
+            builder
+            .AddPreset(factory => factory.Buttons().Button(name: "Button Name", text: "Add Current Camera", builder: builder => builder.SetStyle(style => {
+                style.width = 100;
+
+                style.color = Color.red;
+            })
+                .ModifyElement(x => x.clicked += () => AddCurrentCameraButton())
+            ));
+
             Plugin.Log.LogWarning("CameraPositionSaveSystemCore Making UI");
             //RefreshCameraPositionRows();
 
@@ -48,6 +57,22 @@ namespace TB_CameraTweaker.CameraPositionSaveSystem
             //}
         }
 
+        private void AddCurrentCameraButton() {
+            if (CameraPositionDataPatcher.Instance == null) {
+                _log.LogError("AddCameraPosition() - Failed: Instance is null, camera not found");
+                return;
+            }
+
+            string cameraName = GetCameraNamePopup();
+            _store.AddCameraPosition(new(cameraName, CameraPositionDataPatcher.Instance.CurrentPosition));
+        }
+
+        private string GetCameraNamePopup() {
+            string randomName = "Random Name: " + new System.Random().Next(1, 99);
+            //_log.LogDebug("GetCameraNamePopup() - Random name generated: " + randomName);
+            return randomName;
+        }
+
         //private void RefreshCameraPositionRows() {
         //    _cameraPositionRowElements.Clear();
         //    foreach (var pos in _cameraSaveSystem.SavedCameraPositions) {
@@ -58,13 +83,20 @@ namespace TB_CameraTweaker.CameraPositionSaveSystem
         internal void RemoveCameraPosition(string cameraPositionName) => _store.RemoveCameraPosition(cameraPositionName);
 
         internal void SetActiveCameraPosition(string cameraPositionName) {
-            if (_store.GetCameraPosition(cameraPositionName, out CameraPositionInfo cam)) {
-                _activePosition = cam;
-                _log.LogDebug("SetActiveCameraPosition() - Success: Set active: " + cam.Name);
-            };
-        }
+            if (!_store.GetCameraPosition(cameraPositionName, out CameraPositionInfo cam)) {
+                _log.LogDebug("SetActiveCameraPosition() - Failed: Could not find position data for: " + cameraPositionName);
+                return;
+            }
 
-        //internal void AddCameraPosition(string cameraPositionName) => _cameraSaveSystem.AddCameraPositionInfo(cameraPositionName);
+            if (CameraPositionDataPatcher.Instance == null) {
+                _log.LogError("SetActiveCameraPosition() - Failed: Instance is null, camera not found");
+                return;
+            }
+
+            _activePosition = cam;
+            CameraPositionDataPatcher.Instance.SetTargetPosition(cam);
+            _log.LogDebug("SetActiveCameraPosition() - Success: Set active: " + cam.Name);
+        }
 
         public void ResetBackToConfigValues() {
             DependencyContainer.GetInstance<CameraFOVPatcher>().UseConfigValue();

@@ -11,6 +11,7 @@ namespace TB_CameraTweaker.Patchers
             containerDefinition.Bind<CameraFOVPatcher>().AsSingleton();
             containerDefinition.Bind<CameraVerticalAngelLimiterPatcher>().AsSingleton();
             containerDefinition.Bind<CameraZoomPatcher>().AsSingleton();
+            containerDefinition.Bind<CameraPositionDataPatcher>().AsSingleton();
         }
     }
 }

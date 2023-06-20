@@ -9,7 +9,7 @@ namespace TB_CameraTweaker.CameraPositions.Saver
 {
     internal class CameraPositionSaverJson : ICameraPositionSaver
     {
-        private readonly LogProxy _log = new("[Camera Positions: Json Saver] ");
+        private readonly LogProxy _log = new("Camera Positions: Json Saver");
         private readonly string _jsonSaveFile;
 
         public CameraPositionSaverJson(string saveFile) {
@@ -19,17 +19,23 @@ namespace TB_CameraTweaker.CameraPositions.Saver
         public IEnumerable<CameraPositionInfo> Load() {
             IEnumerable<CameraPositionInfo> loadedData = new List<CameraPositionInfo>();
 
-            if (!File.Exists(_jsonSaveFile)) return loadedData;
+            if (!File.Exists(_jsonSaveFile)) {
+                _log.LogWarning("Load() - Failed: save file does not exist: " + _jsonSaveFile);
+                return loadedData;
+            }
 
             try {
                 using (StreamReader r = new StreamReader(_jsonSaveFile)) {
                     string json = r.ReadToEnd();
-                    loadedData = JsonConvert.DeserializeObject<List<CameraPositionInfo>>(json).ToList();
+                    var deserializedData = JsonConvert.DeserializeObject<List<CameraPositionInfo>>(json);
+                    if (deserializedData != null) {
+                        loadedData = deserializedData;
+                        _log.LogDebug("Load() - Success: #" + loadedData.Count());
+                    }
                 }
-                _log.LogDebug("Load() - Success: #" + loadedData.Count());
             }
-            catch (System.Exception) {
-                _log.LogError("Load() - Failed: Unable to load data");
+            catch (System.Exception e) {
+                _log.LogError("Load() - Failed: Unable to load data " + e.Message);
             }
             return loadedData;
         }
