@@ -24,6 +24,8 @@ namespace TB_CameraTweaker.CameraPositionSaveSystem
             ICameraPositionSaver saver = new CameraPositionSaverJson(saveFile);
             _store = new CameraPositionStore(saver);
 
+            AddDummyData();
+
             //_cameraSaveSystem.ListChanged += () => RefreshCameraPositionRows();
             //RefreshCameraPositionRows();
 
