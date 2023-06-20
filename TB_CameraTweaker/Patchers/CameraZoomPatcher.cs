@@ -11,7 +11,7 @@ namespace TB_CameraTweaker.Patchers
     internal class CameraZoomPatcher : PatcherBase<float>
     {
         private static CameraZoomPatcher _instance;
-        private SliderOption _sliderZoomFactor;
+        private SliderElement _sliderZoomFactor;
 
         public CameraZoomPatcher() : base("CameraComponent - " + "Zoom Factor") { _instance = this; }
 
@@ -46,7 +46,7 @@ namespace TB_CameraTweaker.Patchers
                 step: 0.5f,
                 footerText: $"{_loc.T($"{LocConfig.LocTag}.single.original")}: 2.5"
             );
-            _sliderZoomFactor = new SliderOption(cfg);
+            _sliderZoomFactor = new SliderElement(cfg);
         }
     }
 }

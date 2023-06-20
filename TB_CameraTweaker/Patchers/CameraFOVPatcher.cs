@@ -10,7 +10,7 @@ namespace TB_CameraTweaker.Patchers
     internal class CameraFOVPatcher : PatcherBase<float>
     {
         private static CameraFOVPatcher _instance;
-        private SliderOption _sliderFOV;
+        private SliderElement _sliderFOV;
 
         public CameraFOVPatcher() : base("CameraComponent - " + "FOV") { _instance = this; }
 
@@ -43,7 +43,7 @@ namespace TB_CameraTweaker.Patchers
                 step: 1.0f,
                 footerText: $"{_loc.T($"{LocConfig.LocTag}.single.original")}: 30"
             );
-            _sliderFOV = new SliderOption(cfg);
+            _sliderFOV = new SliderElement(cfg);
         }
     }
 }

@@ -10,12 +10,12 @@ using UnityEngine.UIElements;
 
 namespace TB_CameraTweaker.KsHelperLib.UI.Elements.Slider
 {
-    internal class SliderOption
+    internal class SliderElement
     {
         private LocalizableLabel _label;
         private Length _lenght;
 
-        public SliderOption(SliderConfig config)
+        public SliderElement(SliderConfig config)
         {
             Config = config;
         }

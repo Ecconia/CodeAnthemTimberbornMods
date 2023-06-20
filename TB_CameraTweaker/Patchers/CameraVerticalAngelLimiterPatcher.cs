@@ -10,7 +10,7 @@ namespace TB_CameraTweaker.Patchers
     internal class CameraVerticalAngelLimiterPatcher : PatcherBase<bool>
     {
         private static CameraVerticalAngelLimiterPatcher _instance;
-        private CheckBoxOption _checkboxVerticalAngelLimiter;
+        private CheckBoxElement _checkboxVerticalAngelLimiter;
 
         public CameraVerticalAngelLimiterPatcher() : base("VerticalAngelLimiter") { _instance = this; }
 
@@ -44,7 +44,7 @@ namespace TB_CameraTweaker.Patchers
                 labelText: _loc.T(key: $"{LocConfig.LocTag}.menu.VerticalLimiter"),
                 footerText: $"{_loc.T($"{LocConfig.LocTag}.single.original")}: {_loc.T($"{LocConfig.LocTag}.single.off")}"
             );
-            _checkboxVerticalAngelLimiter = new CheckBoxOption(cfg);
+            _checkboxVerticalAngelLimiter = new CheckBoxElement(cfg);
         }
     }
 }

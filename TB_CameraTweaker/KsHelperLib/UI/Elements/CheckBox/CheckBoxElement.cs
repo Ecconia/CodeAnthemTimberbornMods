@@ -5,11 +5,11 @@ using UnityEngine.UIElements;
 
 namespace TB_CameraTweaker.KsHelperLib.UI.Elements.CheckBox
 {
-    internal class CheckBoxOption
+    internal class CheckBoxElement
     {
         private LocalizableLabel _label;
 
-        public CheckBoxOption(CheckBoxConfig config)
+        public CheckBoxElement(CheckBoxConfig config)
         {
             Config = config;
         }
