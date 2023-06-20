@@ -16,13 +16,15 @@ namespace TB_CameraTweaker.Patchers
 
         public static void Postfix(CameraComponent __instance) => _instance?.PostfixPatch(__instance);
 
+        public override void UseConfigValue() => ChangeValue(_sliderFOV.Config.Value);
+
         protected override void AddUIElements(VisualElementBuilder builder) {
             _sliderFOV.Build(builder, true);
         }
 
         protected override void SetupPatcher() {
             SetupConfig();
-            _sliderFOV.Config.Updated += () => ChangeValue(_sliderFOV.Config.Value);
+            _sliderFOV.Config.Updated += () => UseConfigValue();
         }
 
         private void PostfixPatch(CameraComponent instance) {

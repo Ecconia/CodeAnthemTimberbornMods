@@ -16,16 +16,20 @@ namespace TB_CameraTweaker.Patchers
 
         public static void Prefix(CameraVerticalAngleLimiter __instance) => _instance?.PrefixPatch(__instance);
 
+        public override void UseConfigValue() => ChangeValue(_checkboxVerticalAngelLimiter.Config.Value);
+
         protected override void AddUIElements(VisualElementBuilder builder) {
+            return; // soft disabled this patch
             _checkboxVerticalAngelLimiter.Build(builder);
         }
 
         protected override void SetupPatcher() {
             SetupConfig();
-            _checkboxVerticalAngelLimiter.Config.Updated += () => ChangeValue(_checkboxVerticalAngelLimiter.Config.Value);
+            _checkboxVerticalAngelLimiter.Config.Updated += () => UseConfigValue();
         }
 
         private void PrefixPatch(CameraVerticalAngleLimiter instance) {
+            return; // soft disabled this patch
             if (IsDirty) {
                 instance._minVerticalAngle = NewValue ? 10f : 55f;
                 IsDirty = false;

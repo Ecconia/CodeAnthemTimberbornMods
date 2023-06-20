@@ -46,10 +46,8 @@ namespace TB_CameraTweaker.Patchers
 
         protected abstract void AddUIElements(VisualElementBuilder builder);
 
-        //[HarmonyPostfix]
-        //public static void Postfix(CameraComponent __instance) {
-        //}
-
         protected abstract void SetupPatcher();
+
+        public abstract void UseConfigValue();
     }
 }
