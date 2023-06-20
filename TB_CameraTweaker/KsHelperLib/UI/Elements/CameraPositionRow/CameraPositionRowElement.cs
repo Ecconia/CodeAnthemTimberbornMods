@@ -24,19 +24,15 @@ namespace TB_CameraTweaker.KsHelperLib.UI.Elements.CameraPositionRow
             //FooterNote(builder);
         }
 
-        private void ActivateButtonClicked() {
-            Plugin.Log.LogError("Activate Button: " + PositionName);
-        }
+        private void ActivateButtonClicked() => _core.SetActiveCameraPosition(PositionName);
 
-        private void DeleteButtonClicked() {
-            Plugin.Log.LogError("Delete Button: " + PositionName);
-        }
+        private void DeleteButtonClicked() => _core.RemoveCameraPosition(PositionName);
 
         private void MakeButton(VisualElementBuilder builder) {
             builder
                 .AddPreset(factory => factory.Buttons().Button(name: "Button Name", text: "X", builder: builder => builder.SetStyle(style => {
                     style = CreateButtonStyle(style);
-                    s.width = 50;
+                    style.width = 50;
 
                     style.color = Color.red;
                 })
