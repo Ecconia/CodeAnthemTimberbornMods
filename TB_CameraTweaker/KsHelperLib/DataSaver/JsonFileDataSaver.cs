@@ -1,36 +1,34 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using TB_CameraTweaker.CameraSaveSystem;
 using TB_CameraTweaker.KsHelperLib.Logger;
 
-namespace TB_CameraTweaker.CameraPositions.Saver
+namespace TB_CameraTweaker.KsHelperLib.DataSaver
 {
-    internal class CameraPositionSaverJson : ICameraPositionSaver
+    internal class JsonFileDataSaver<T> : IDataSaver<T> where T : class
     {
-        private readonly LogProxy _log = new("Camera Positions: Json Saver");
+        private readonly LogProxy _log = new("Json Saver: " + nameof(T));
         private readonly string _jsonSaveFile;
 
-        public CameraPositionSaverJson(string saveFile) {
+        public JsonFileDataSaver(string saveFile) {
             _jsonSaveFile = saveFile;
         }
 
-        public IEnumerable<CameraPositionInfo> Load() {
-            IEnumerable<CameraPositionInfo> loadedData = new List<CameraPositionInfo>();
+        public IEnumerable<T> Load() {
+            IEnumerable<T> loadedData = new List<T>();
 
             if (!File.Exists(_jsonSaveFile)) {
-                _log.LogWarning("Load() - Failed: save file does not exist: " + _jsonSaveFile);
+                _log.LogWarning("Load() - Failed: file does not exist: " + _jsonSaveFile);
                 return loadedData;
             }
 
             try {
                 using (StreamReader r = new StreamReader(_jsonSaveFile)) {
                     string json = r.ReadToEnd();
-                    var deserializedData = JsonConvert.DeserializeObject<List<CameraPositionInfo>>(json);
+                    var deserializedData = JsonConvert.DeserializeObject<List<T>>(json);
                     if (deserializedData != null) {
                         loadedData = deserializedData;
-                        _log.LogDebug("Load() - Success: #" + loadedData.Count());
+                        _log.LogDebug("Load() - Success: #" + deserializedData.Count);
                     }
                 }
             }
@@ -40,20 +38,20 @@ namespace TB_CameraTweaker.CameraPositions.Saver
             return loadedData;
         }
 
-        public bool Save(List<CameraPositionInfo> cameraPositionInfos) {
-            if (cameraPositionInfos == null || cameraPositionInfos?.Count == 0) {
-                _log.LogError("Save() - Failed: Invalid data,");
+        public bool Save(List<T> objectsToSave) {
+            if (objectsToSave == null || objectsToSave?.Count == 0) {
+                _log.LogError("Save() - Failed: Invalid data");
                 return false;
             }
 
             try {
-                string objectsAsJsonString = JsonConvert.SerializeObject(cameraPositionInfos, Formatting.Indented);
+                string objectsAsJsonString = JsonConvert.SerializeObject(objectsToSave, Formatting.Indented);
                 using (StreamWriter w = new StreamWriter(_jsonSaveFile, false)) {
                     w.WriteLine(objectsAsJsonString);
                 }
             }
-            catch (System.Exception) {
-                _log.LogFatal("Save() - Failed: Unable to save data");
+            catch (System.Exception e) {
+                _log.LogFatal("Save() - Failed: Unable to save data. Error: " + e);
                 // not sure if we should delete save file here to avoid corrupt data
                 //DeleteSaveFile()
                 return false;

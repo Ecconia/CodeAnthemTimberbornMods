@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TB_CameraTweaker.CameraPositions.Saver;
 using TB_CameraTweaker.CameraSaveSystem;
+using TB_CameraTweaker.KsHelperLib.DataSaver;
 using TB_CameraTweaker.KsHelperLib.Logger;
 
 //TODO: maybe add events for updated/changed position info and trigger save method
@@ -17,9 +17,9 @@ namespace TB_CameraTweaker.CameraPositions.Store
 
         private readonly LogProxy _log = new("[Camera Positions: Store] ");
         private readonly List<CameraPositionInfo> _savedCameraPositions = new();
-        private readonly ICameraPositionSaver _saver;
+        private readonly IDataSaver<CameraPositionInfo> _saver;
 
-        public CameraPositionStore(ICameraPositionSaver saver) {
+        public CameraPositionStore(IDataSaver<CameraPositionInfo> saver) {
             _saver = saver;
             _savedCameraPositions.AddRange(_saver.Load());
         }

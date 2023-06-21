@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using TB_CameraTweaker.CameraPositions.Saver;
 using TB_CameraTweaker.CameraPositions.Store;
 using TB_CameraTweaker.CameraSaveSystem;
+using TB_CameraTweaker.KsHelperLib.DataSaver;
 using TB_CameraTweaker.KsHelperLib.Logger;
 using TB_CameraTweaker.KsHelperLib.UI.Elements.CameraPositionRow;
 using TB_CameraTweaker.KsHelperLib.UI.Menu;
@@ -21,7 +21,7 @@ namespace TB_CameraTweaker.CameraPositionSaveSystem
 
         public CameraPositionCore() {
             string saveFile = $@"{BepInEx.Paths.ConfigPath}\{MyPluginInfo.PLUGIN_GUID}_cameraPositions.json";
-            ICameraPositionSaver saver = new CameraPositionSaverJson(saveFile);
+            var saver = new JsonFileDataSaver<CameraPositionInfo>(saveFile);
             _store = new CameraPositionStore(saver);
 
             //AddDummyData();
