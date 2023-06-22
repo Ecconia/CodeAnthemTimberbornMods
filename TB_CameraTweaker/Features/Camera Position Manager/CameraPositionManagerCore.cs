@@ -1,36 +1,39 @@
-﻿using System.Collections.Generic;
-using TB_CameraTweaker.CameraPositions.Store;
-using TB_CameraTweaker.CameraSaveSystem;
+﻿using TB_CameraTweaker.CameraPositions.Store;
+using TB_CameraTweaker.Features.Camera_Position_Manager.UI;
+using TB_CameraTweaker.Features.Camera_Tweaker.UI;
 using TB_CameraTweaker.KsHelperLib.DataSaver;
 using TB_CameraTweaker.KsHelperLib.Logger;
-using TB_CameraTweaker.KsHelperLib.UI.Elements.CameraPositionRow;
-using TB_CameraTweaker.KsHelperLib.UI.Menu;
-using TB_CameraTweaker.Patchers;
+using TB_CameraTweaker.Models;
+using TB_CameraTweaker.Patches;
 using TimberApi.DependencyContainerSystem;
 using TimberApi.UiBuilderSystem.ElementSystem;
 using UnityEngine;
 
-namespace TB_CameraTweaker.CameraPositionSaveSystem
+namespace TB_CameraTweaker.Features.Camera_Position_Manager
 {
-    internal class CameraPositionCore
+    internal class CameraPositionManagerCore
     {
-        private ICameraPositionStore _store;
-        private List<CameraPositionRowElement> _cameraPositionRowElements = new List<CameraPositionRowElement>();
+        private readonly ICameraPositionStore _store;
+        //private readonly List<CameraPositionRowElement> _cameraPositionRowElements = new();
         private CameraPositionInfo _activePosition;
         private readonly LogProxy _log = new("[Camera Positions: Core] ");
+        private readonly CameraSetPositionPatcher _cameraPositionPatcher;
+        private readonly CameraGetPositionPatcher _cameraGetPositionPatcher;
+        private readonly CameraPositionManagerUI _ui;
 
-        public CameraPositionCore() {
+        public CameraPositionManagerCore(CameraSetPositionPatcher cameraPositionPatcher, CameraGetPositionPatcher cameraGetPositionPatcher) {
+            _cameraPositionPatcher = cameraPositionPatcher;
+            _cameraGetPositionPatcher = cameraGetPositionPatcher;
+
             string saveFile = $@"{BepInEx.Paths.ConfigPath}\{MyPluginInfo.PLUGIN_GUID}_cameraPositions.json";
-            var saver = new JsonFileDataSaver<CameraPositionInfo>(saveFile);
+            IDataSaver<CameraPositionInfo> saver = new JsonFileDataSaver<CameraPositionInfo>(saveFile);
             _store = new CameraPositionStore(saver);
 
+            _ui = new CameraPositionManagerUI(_store);
             //AddDummyData();
 
             //_cameraSaveSystem.ListChanged += () => RefreshCameraPositionRows();
             //RefreshCameraPositionRows();
-
-            UIRegister.AddUiElements -= AddUIElements;
-            UIRegister.AddUiElements += AddUIElements;
 
             Plugin.Log.LogWarning("CameraPositionSaveSystemCore Init");
         }
@@ -48,9 +51,9 @@ namespace TB_CameraTweaker.CameraPositionSaveSystem
             Plugin.Log.LogWarning("CameraPositionSaveSystemCore Making UI");
             //RefreshCameraPositionRows();
 
-            foreach (var pos in _store.SavedCameraPositions) {
-                new CameraPositionRowElement(pos.Name, this).Build(builder);
-            }
+            //foreach (var pos in _store.SavedCameraPositions) {
+            //    new CameraPositionRowElement(pos.Name, this).Build(builder);
+            //}
 
             //foreach (var row in _cameraPositionRowElements) {
             //    row.Build(builder);
@@ -58,13 +61,13 @@ namespace TB_CameraTweaker.CameraPositionSaveSystem
         }
 
         private void AddCurrentCameraButton() {
-            if (CameraPositionDataPatcher.Instance == null) {
-                _log.LogError("AddCameraPosition() - Failed: Instance is null, camera not found");
-                return;
-            }
+            //if (_cameraPositionPatcher == null) {
+            //    _log.LogError("AddCameraPosition() - Failed: Instance is null, camera not found");
+            //    return;
+            //}
 
             string cameraName = GetCameraNamePopup();
-            _store.AddCameraPosition(new(cameraName, CameraPositionDataPatcher.Instance.CurrentPosition));
+            _store.AddCameraPosition(new(cameraName, _cameraGetPositionPatcher.GetCurrentPosition()));
         }
 
         private string GetCameraNamePopup() {
@@ -88,28 +91,27 @@ namespace TB_CameraTweaker.CameraPositionSaveSystem
                 return;
             }
 
-            if (CameraPositionDataPatcher.Instance == null) {
-                _log.LogError("SetActiveCameraPosition() - Failed: Instance is null, camera not found");
-                return;
-            }
+            //if (_cameraPositionPatcher == null) {
+            //    _log.LogError("SetActiveCameraPosition() - Failed: Instance is null, camera not found");
+            //    return;
+            //}
 
             _activePosition = cam;
-            CameraPositionDataPatcher.Instance.SetTargetPosition(cam);
+            _cameraPositionPatcher.SetJumpPosition(cam);
             _log.LogDebug("SetActiveCameraPosition() - Success: Set active: " + cam.Name);
         }
 
         public void ResetBackToConfigValues() {
-            DependencyContainer.GetInstance<CameraFOVPatcher>().UseConfigValue();
-            //DependencyContainer.GetInstance<CameraVerticalAngelLimiterPatcher>().UseConfigValue(); // soft disabled this patch
-            DependencyContainer.GetInstance<CameraZoomPatcher>().UseConfigValue();
+            DependencyContainer.GetInstance<CameraTweakerUI_FOV>().UseConfigValue();
+            DependencyContainer.GetInstance<CameraTweakerUI_ZoomLevelLimiter>().UseConfigValue();
         }
 
-        private void AddDummyData() {
-            var testCamera = new CameraPositionInfo(name: "Test position info Name", new Vector3(), 55f, 40f, 30f, 60f);
-            var testCamera2 = new CameraPositionInfo(name: "Test position info Name 2", new Vector3(), 55f, 40f, 30f, 60f);
-            _store.AddCameraPosition(testCamera);
-            _store.AddCameraPosition(testCamera2);
-        }
+        //private void AddDummyData() {
+        //    var testCamera = new CameraPositionInfo(name: "Test position info Name", new Vector3(), 55f, 40f, 30f, 60f);
+        //    var testCamera2 = new CameraPositionInfo(name: "Test position info Name 2", new Vector3(), 55f, 40f, 30f, 60f);
+        //    _store.AddCameraPosition(testCamera);
+        //    _store.AddCameraPosition(testCamera2);
+        //}
 
         internal bool IsPositionActive(string positionName) {
             if (_activePosition == null) return false;

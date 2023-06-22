@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TB_CameraTweaker.CameraSaveSystem;
 using TB_CameraTweaker.KsHelperLib.DataSaver;
 using TB_CameraTweaker.KsHelperLib.Logger;
+using TB_CameraTweaker.Models;
 
 //TODO: maybe add events for updated/changed position info and trigger save method
 

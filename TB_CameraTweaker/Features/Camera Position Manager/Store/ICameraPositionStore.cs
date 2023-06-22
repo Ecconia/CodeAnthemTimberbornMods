@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TB_CameraTweaker.CameraSaveSystem;
+using TB_CameraTweaker.Models;
 
 namespace TB_CameraTweaker.CameraPositions.Store
 {
