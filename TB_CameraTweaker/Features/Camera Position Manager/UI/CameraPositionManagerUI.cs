@@ -3,8 +3,10 @@ using TB_CameraTweaker.CameraPositions.Store;
 using TB_CameraTweaker.KsHelperLib.UI.Menu;
 using TB_CameraTweaker.Models;
 using TimberApi.DependencyContainerSystem;
+using TimberApi.UiBuilderSystem;
 using TimberApi.UiBuilderSystem.ElementSystem;
 using UnityEngine.UIElements;
+using static UnityEngine.UIElements.Length.Unit;
 
 namespace TB_CameraTweaker.Features.Camera_Position_Manager.UI
 {
@@ -21,16 +23,13 @@ namespace TB_CameraTweaker.Features.Camera_Position_Manager.UI
         }
 
         private void UpdateUIContent(VisualElementBuilder builder) {
-            //AddTable(builder);
-            if (builder == null) return;
-            if (_store.SavedCameraPositions == null) return;
+            var foo = builder.CreateComponentBuilder()
+                  .CreateVisualElement();
 
-            var parent = builder.Build();
-            if (parent == null) {
-                Plugin.Log.LogDebug("Parent is null");
-                return;
-            }
-            GetCameraRows(parent);
+            var parent = builder.;
+            builder.AddPreset(x => x.ScrollViews().MainScrollView(parent));
+            GetCameraRows(builder);
+
             //(x => GetCameraRows(x.Build()));
             //fac.q
 
@@ -48,26 +47,33 @@ namespace TB_CameraTweaker.Features.Camera_Position_Manager.UI
             //Plugin.Log.LogDebug("Generating Camera Manager UI 5");
         }
 
-        private VisualElement GetCameraRows(VisualElement list) {
+        private VisualElement GetCameraRows(VisualElementBuilder builder) {
             foreach (var cam in _store.SavedCameraPositions) {
-                VisualElement row = list.Q<VisualElement>();
-                row.Q<Label>("Name").text = cam.Name;
-                Plugin.Log.LogDebug("3");
+                builder.AddComponent(builder.SetName(cam.Name)
+                    .SetHeight(new Length(30, Pixel))
+                    .SetWidth(new Length(290, Pixel))
+                    .SetPadding(new Padding(0, 0, 0, 0))
+                    ).Build();
 
-                var activateButton = row.Q<Button>();
-                activateButton.name = "Activate";
-                activateButton.clicked += ButtonActivateClicked(cam);
-                row.Add(activateButton);
-                Plugin.Log.LogDebug("4");
+                //Plugin.Log.LogDebug("2");
+                //VisualElement row = list.Q<VisualElement>();
+                //row.Q<Label>("Name").text = cam.Name;
+                //Plugin.Log.LogDebug("3");
 
-                var deletetButton = row.Q<Button>();
-                deletetButton.name = "Delete";
-                deletetButton.clicked += ButtonDeleteClicked(cam);
-                row.Add(deletetButton);
-                Plugin.Log.LogDebug("5");
+                //var activateButton = row.Q<Button>();
+                //activateButton.name = "Activate";
+                //activateButton.clicked += ButtonActivateClicked(cam);
+                //row.Add(activateButton);
+                //Plugin.Log.LogDebug("4");
 
-                list.Add(row);
-                Plugin.Log.LogDebug("6");
+                //var deletetButton = row.Q<Button>();
+                //deletetButton.name = "Delete";
+                //deletetButton.clicked += ButtonDeleteClicked(cam);
+                //row.Add(deletetButton);
+                //Plugin.Log.LogDebug("5");
+
+                //list.Add(row);
+                //Plugin.Log.LogDebug("6");
             }
             return list;
         }
