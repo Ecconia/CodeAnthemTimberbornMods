@@ -2,7 +2,7 @@
 
 namespace TB_CameraTweaker.KsHelperLib.DataSaver
 {
-    internal interface IDataSaver<T> where T : class
+    internal interface IDataSaver<T>
     {
         IEnumerable<T> Load();
 

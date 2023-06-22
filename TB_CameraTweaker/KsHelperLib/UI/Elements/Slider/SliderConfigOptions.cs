@@ -3,11 +3,11 @@ using System;
 
 namespace TB_CameraTweaker.KsHelperLib.UI.Elements.Slider
 {
-    internal class SliderConfig
+    internal class SliderConfigOptions
     {
         public event Action Updated;
 
-        public SliderConfig(string key, string description, float min, float max, float def, string labelText, float step = 0, string footerText = " ") {
+        public SliderConfigOptions(string key, string description, float min, float max, float def, string labelText, float step = 0, string footerText = "") {
             Key = key;
             Description = description;
 
@@ -44,7 +44,7 @@ namespace TB_CameraTweaker.KsHelperLib.UI.Elements.Slider
         private ConfigEntry<float> Config { get; set; }
 
         private void CreateConfigEntry() {
-            ConfigDescription desc = new ConfigDescription(Description, new AcceptableValueRange<float>(Min, Max));
+            ConfigDescription desc = new(Description, new AcceptableValueRange<float>(Min, Max));
             Config = Plugin.Config.Bind(MyPluginInfo.PLUGIN_NAME, Key, Default, desc);
             Config.SettingChanged += SettingChanged;
         }

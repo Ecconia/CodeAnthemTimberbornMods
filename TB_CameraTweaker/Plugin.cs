@@ -3,7 +3,7 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
-using TB_CameraTweaker.CameraPositionSaveSystem;
+using TB_CameraTweaker.Features.Camera_Position_Manager;
 using TB_CameraTweaker.KsHelperLib.Localization;
 using TB_CameraTweaker.KsHelperLib.Logger;
 
@@ -15,21 +15,15 @@ namespace TB_CameraTweaker
     {
         internal new static ConfigFile Config;
         internal static LogProxy Log;
-        internal static CameraPositionCore _cameraPositionSaveSystem;
-        private static Harmony _harmony;
+        internal static CameraPositionManagerCore _cameraPositionSaveSystem;
 
         public Plugin() {
             SetupLogger();
             Config = base.Config;
             Config.SaveOnConfigSet = true;
             SetupLOC();
-            _cameraPositionSaveSystem = new CameraPositionCore();
-            _harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
-        }
-
-        private void Awake() {
-            _harmony.PatchAll();
-            Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
+            //_cameraPositionSaveSystem = new CameraPositionCore();
+            Log.LogInfo($"Plugin '{MyPluginInfo.PLUGIN_GUID}' is loaded!");
         }
 
         private void SetupLogger() {
@@ -49,18 +43,5 @@ namespace TB_CameraTweaker
                 ""
             };
         }
-
-        //public void Entry(IMod mod, IConsoleWriter consoleWriter)
-        //{
-        //    LogProxy._logger = this.Logger;
-        //    Config = base.Config;
-        //    Config.SaveOnConfigSet = true;
-
-        // SetupLOC();
-
-        // _harmony = new Harmony(_pluginId); _harmony.PatchAll();
-
-        //    Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
-        //}
     }
 }

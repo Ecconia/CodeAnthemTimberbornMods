@@ -31,6 +31,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="KsHelperLib\UI\Elements\CameraPositionRow\" />
 		<Folder Include="_package\Pictures\" />
 	</ItemGroup>
 

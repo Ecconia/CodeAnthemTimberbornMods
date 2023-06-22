@@ -7,15 +7,16 @@ namespace TB_CameraTweaker.Lang
     {
         public string Tag => "enUS";
 
-        public IEnumerable<LocEntryModel> GetEntries()
-        {
+        public IEnumerable<LocEntryModel> GetEntries() {
             return new List<LocEntryModel>()
             {
                 new LocEntryModel("menu.title", "Camera Tweaker", "Title of menu" ),
                 new LocEntryModel("menu.options", "Options", "Options header of menu" ),
                 new LocEntryModel("menu.zoomfactor", "Zoom Factor", "Header of option: Zoom Factor" ),
+                new LocEntryModel("menu.zoomspeed", "Zoom Speed", "Header of option: Zoom Speed" ),
                 new LocEntryModel("menu.VerticalLimiter", "Disable Automatic Camera Snap Back", "Header of option: Vertical Angel Limiter" ),
                 new LocEntryModel("menu.fov", "Field Of View", "Header of option: FOV" ),
+                new LocEntryModel("menu.freeze", "Freeze Camera", "Header of option: Freeze" ),
                 new LocEntryModel("single.default", "Default" ),
                 new LocEntryModel("single.original", "Original" ),
                 new LocEntryModel("single.on", "On" ),

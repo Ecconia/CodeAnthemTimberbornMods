@@ -11,7 +11,7 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
         {
             if (langFile.Exists) { langFile.Delete(); }
 
-            using (FileStream fs = new FileStream(langFile.FullName, FileMode.Append))
+            using (FileStream fs = new(langFile.FullName, FileMode.Append))
             {
                 using (TextWriter tw = new StreamWriter(fs))
                 {

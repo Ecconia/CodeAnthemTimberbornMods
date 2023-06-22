@@ -18,7 +18,7 @@ namespace TB_CameraTweaker.KsHelperLib.UI.Elements.CheckBox
         }
 
         private void CreateConfigEntry() {
-            ConfigDescription desc = new ConfigDescription(Description);
+            ConfigDescription desc = new(Description);
             Config = Plugin.Config.Bind(MyPluginInfo.PLUGIN_NAME, Key, Default, desc);
             Config.SettingChanged += SettingChanged;
         }

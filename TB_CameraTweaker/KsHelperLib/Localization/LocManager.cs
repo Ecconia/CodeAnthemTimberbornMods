@@ -13,11 +13,11 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
 
     {
         private readonly LocLangFileHandler FileHandler;
-        private readonly Dictionary<string, IEnumerable<LocEntryModel>> PredefinedLanguages = new Dictionary<string, IEnumerable<LocEntryModel>>();
+        private readonly Dictionary<string, IEnumerable<LocEntryModel>> PredefinedLanguages = new();
         private bool Initialized;
         private string LangDirPath;
-        private List<string> AllLanguageTags = new List<string>();
-        private LogProxy Log = new LogProxy("LocManager ", LogLevel.None);
+        private readonly List<string> AllLanguageTags = new();
+        private readonly LogProxy Log = new("LocManager ", LogLevel.None);
 
         public LocManager()
         {
@@ -49,7 +49,7 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
         private void CreateLangFolder()
         {
             string langPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\lang\\";
-            DirectoryInfo langDir = new DirectoryInfo(langPath);
+            DirectoryInfo langDir = new(langPath);
             if (!langDir.Exists) langDir.Create();
             LangDirPath = langDir.Exists ? langDir.FullName : throw new DirectoryNotFoundException($"Couldn't create folder: {langDir.FullName}");
             Log.LogDebug($"Language Folder Created: {langDir.FullName}");
@@ -64,11 +64,11 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
             {
                 var l = (ILanguage)Activator.CreateInstance(language);
 
-                List<LocEntryModel> entriesWithTag = new List<LocEntryModel>();
+                List<LocEntryModel> entriesWithTag = new();
                 foreach (var entry in l.GetEntries())
                 {
                     string keyWithTag = LocConfig.LocTag + "." + entry.Key;
-                    LocEntryModel fixedEntry = new LocEntryModel(keyWithTag, entry.Text, entry.Comment);
+                    LocEntryModel fixedEntry = new(keyWithTag, entry.Text, entry.Comment);
                     entriesWithTag.Add(fixedEntry);
                 }
                 bool successfullyAdded = PredefinedLanguages.TryAdd(l.Tag, entriesWithTag);
@@ -143,7 +143,7 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
             //}
 
             bool inconsistent = false;
-            List<LocEntryModel> newEntries = new List<LocEntryModel>();
+            List<LocEntryModel> newEntries = new();
 
             foreach (var currentEntry in currentEntries)
             {

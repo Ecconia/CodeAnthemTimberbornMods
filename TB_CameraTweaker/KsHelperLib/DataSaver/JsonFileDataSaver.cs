@@ -23,7 +23,7 @@ namespace TB_CameraTweaker.KsHelperLib.DataSaver
             }
 
             try {
-                using (StreamReader r = new StreamReader(_jsonSaveFile)) {
+                using (StreamReader r = new(_jsonSaveFile)) {
                     string json = r.ReadToEnd();
                     var deserializedData = JsonConvert.DeserializeObject<List<T>>(json);
                     if (deserializedData != null) {
@@ -46,7 +46,7 @@ namespace TB_CameraTweaker.KsHelperLib.DataSaver
 
             try {
                 string objectsAsJsonString = JsonConvert.SerializeObject(objectsToSave, Formatting.Indented);
-                using (StreamWriter w = new StreamWriter(_jsonSaveFile, false)) {
+                using (StreamWriter w = new(_jsonSaveFile, false)) {
                     w.WriteLine(objectsAsJsonString);
                 }
             }
