@@ -1,5 +1,6 @@
 ﻿using System;
 using TB_CameraTweaker.KsHelperLib.Localization;
+using TB_CameraTweaker.KsHelperLib.UI.StoreHelper;
 using TimberApi.DependencyContainerSystem;
 using TimberApi.UiBuilderSystem;
 using TimberApi.UiBuilderSystem.ElementSystem;
@@ -13,11 +14,11 @@ namespace TB_CameraTweaker.KsHelperLib.UI.Menu
 {
     internal class OptionsMenu : IPanelController, IUpdatableSingleton
     {
-        public event Action<VisualElementBuilder> UpdateUIContent;
-
+        private readonly ActionPriorityStore<VisualElementBuilder> _actionPriorityStore = new();
+        public bool UseDescendingPriority { get; set; } = false;
         public static Action OpenOptionsDelegate;
 
-        private static bool _requireContentUpdate;
+        private bool _requireContentUpdate;
         private readonly ILoc _loc;
         private readonly PanelStack _panelStack;
         private readonly UIBuilder _uiBuilder;
@@ -32,7 +33,11 @@ namespace TB_CameraTweaker.KsHelperLib.UI.Menu
             OpenOptionsDelegate = OpenOptionsPanel;
         }
 
-        public static void RequireUpdate() => _requireContentUpdate = true;
+        public void RegisterFeature(Action<VisualElementBuilder> featureCreateUIAction, int priority) => _actionPriorityStore.RegisterFeature(featureCreateUIAction, priority);
+
+        public void UnRegisterFeature(Action<VisualElementBuilder> featureCreateUIAction) => _actionPriorityStore.UnregisterFeature(featureCreateUIAction);
+
+        public void RequireUpdate() => _requireContentUpdate = true;
 
         /// <summary>
         /// Create the Options Panel
@@ -84,10 +89,10 @@ namespace TB_CameraTweaker.KsHelperLib.UI.Menu
 
         private void CallInFeaturesUIContent() {
             if (!_requireContentUpdate) return;
-
             _currentParent.Clear();
-            UpdateUIContent?.Invoke(_currentVisualElementBuilder);
+            _actionPriorityStore.InvokeActions(_currentVisualElementBuilder, UseDescendingPriority);
             _requireContentUpdate = false;
+            Plugin.Log.LogDebug("UI Updated");
         }
 
         private void OpenOptionsPanel() {

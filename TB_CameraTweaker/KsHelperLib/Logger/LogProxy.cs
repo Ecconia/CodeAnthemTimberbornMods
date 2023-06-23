@@ -19,13 +19,12 @@ namespace TB_CameraTweaker.KsHelperLib.Logger
         public static LogLevel Level { get; set; }
         private readonly LogLevel _level;
 
-        public LogProxy(string tag = "", LogLevel level = LogLevel.All)
-        {
+        public LogProxy(string tag = "", LogLevel level = LogLevel.All) {
             _tag = tag;
             _level = level;
         }
 
-        internal static ManualLogSource _logger { get; set; }
+        internal static ManualLogSource Logger { get; set; }
 
         // Summary: Logs a message with BepInEx.Logging.LogLevel.Fatal level.
         //
@@ -62,46 +61,44 @@ namespace TB_CameraTweaker.KsHelperLib.Logger
         // Parameters: data: Data to log.
         internal void LogDebug(object data) => SendLogMessage(LogProxyType.Debug, data);
 
-        private void SendLogMessage(LogProxyType level, object data)
-        {
+        private void SendLogMessage(LogProxyType level, object data) {
             //_logger.LogError($"Global Level is: {LogProxy.Level}, Instance Level is: {_level}");
             if ((int)level > (int)Level) return;
 
-            switch (level)
-            {
+            switch (level) {
                 case LogProxyType.Plain:
                     if (SkipLogMessage(LogLevel.Info)) return;
-                    _logger.LogWarning(data);
+                    Logger.LogWarning(data);
                     break;
 
                 case LogProxyType.Debug:
                     if (SkipLogMessage(LogLevel.Debug)) return;
-                    _logger.LogWarning($"(debug) [{_tag}] {data}");
+                    Logger.LogWarning($"(debug) [{_tag}] {data}");
                     break;
 
                 case LogProxyType.Message:
                     if (SkipLogMessage(LogLevel.Message)) return;
-                    _logger.LogWarning($"{_tag}{data}");
+                    Logger.LogWarning($"{_tag}{data}");
                     break;
 
                 case LogProxyType.Info:
                     if (SkipLogMessage(LogLevel.Info)) return;
-                    _logger.LogWarning($"{_tag}{data}");
+                    Logger.LogWarning($"{_tag}{data}");
                     break;
 
                 case LogProxyType.Warning:
                     if (SkipLogMessage(LogLevel.Warning)) return;
-                    _logger.LogWarning($"{_tag}{data}");
+                    Logger.LogWarning($"{_tag}{data}");
                     break;
 
                 case LogProxyType.Error:
                     if (SkipLogMessage(LogLevel.Error)) return;
-                    _logger.LogError($"{_tag}{data}");
+                    Logger.LogError($"{_tag}{data}");
                     break;
 
                 case LogProxyType.Fatal:
                     if (SkipLogMessage(LogLevel.Fatal)) return;
-                    _logger.LogMessage($"{_tag}{data}");
+                    Logger.LogMessage($"{_tag}{data}");
                     break;
 
                 default:
@@ -109,8 +106,7 @@ namespace TB_CameraTweaker.KsHelperLib.Logger
             }
         }
 
-        private bool SkipLogMessage(LogLevel level)
-        {
+        private bool SkipLogMessage(LogLevel level) {
             if (Level == LogLevel.All) return (int)level > (int)_level;
 
             return (int)level > (int)Level;

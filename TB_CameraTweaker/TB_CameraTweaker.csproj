@@ -19,7 +19,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Features\Camera Position Manager\UI\CameraPositionRowElement.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Include="..\.editorconfig" Link=".editorconfig" />
+		<None Include="Features\Camera Position Manager\UI\CameraPositionRowElement.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -31,7 +36,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="KsHelperLib\UI\Elements\CameraPositionRow\" />
 		<Folder Include="_package\Pictures\" />
 	</ItemGroup>
 

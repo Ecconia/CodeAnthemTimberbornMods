@@ -3,7 +3,7 @@ using TimberApi.UiBuilderSystem.CustomElements;
 using TimberApi.UiBuilderSystem.ElementSystem;
 using UnityEngine.UIElements;
 
-namespace TB_CameraTweaker.KsHelperLib.UI.Elements.Slider
+namespace TB_CameraTweaker.KsHelperLib.UI.ConfigBoundElements
 {
     internal class SliderConfigUIElement : IConfigUIElement<float>
     {

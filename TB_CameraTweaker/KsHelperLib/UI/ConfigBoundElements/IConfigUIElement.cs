@@ -1,7 +1,7 @@
 ﻿using System;
 using TimberApi.UiBuilderSystem.ElementSystem;
 
-namespace TB_CameraTweaker.KsHelperLib.UI.Elements
+namespace TB_CameraTweaker.KsHelperLib.UI.ConfigBoundElements
 {
     internal interface IConfigUIElement<T>
     {

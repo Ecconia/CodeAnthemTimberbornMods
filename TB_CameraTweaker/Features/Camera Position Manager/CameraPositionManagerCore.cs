@@ -1,25 +1,24 @@
 ﻿using TB_CameraTweaker.CameraPositions.Store;
-using TB_CameraTweaker.Features.Camera_Position_Manager.UI;
-using TB_CameraTweaker.Features.Camera_Tweaker.UI;
 using TB_CameraTweaker.KsHelperLib.DataSaver;
 using TB_CameraTweaker.KsHelperLib.Logger;
 using TB_CameraTweaker.Models;
 using TB_CameraTweaker.Patches;
+using TB_CameraTweaker.UI.Tweaks;
 using TimberApi.DependencyContainerSystem;
 using TimberApi.UiBuilderSystem.ElementSystem;
 using UnityEngine;
 
-namespace TB_CameraTweaker.Features.Camera_Position_Manager
+namespace TB_CameraTweaker.Camera_Position_Manager
 {
     internal class CameraPositionManagerCore
     {
+        public ICameraPositionStore Store { get; private set; }
         private readonly ICameraPositionStore _store;
         //private readonly List<CameraPositionRowElement> _cameraPositionRowElements = new();
         private CameraPositionInfo _activePosition;
         private readonly LogProxy _log = new("[Camera Positions: Core] ");
         private readonly CameraSetPositionPatcher _cameraPositionPatcher;
         private readonly CameraGetPositionPatcher _cameraGetPositionPatcher;
-        private readonly CameraPositionManagerUI _ui;
 
         public CameraPositionManagerCore(CameraSetPositionPatcher cameraPositionPatcher, CameraGetPositionPatcher cameraGetPositionPatcher) {
             _cameraPositionPatcher = cameraPositionPatcher;
@@ -27,9 +26,8 @@ namespace TB_CameraTweaker.Features.Camera_Position_Manager
 
             string saveFile = $@"{BepInEx.Paths.ConfigPath}\{MyPluginInfo.PLUGIN_GUID}_cameraPositions.json";
             IDataSaver<CameraPositionInfo> saver = new JsonFileDataSaver<CameraPositionInfo>(saveFile);
-            _store = new CameraPositionStore(saver);
+            Store = new CameraPositionStore(saver);
 
-            _ui = new CameraPositionManagerUI(_store);
             //AddDummyData();
 
             //_cameraSaveSystem.ListChanged += () => RefreshCameraPositionRows();

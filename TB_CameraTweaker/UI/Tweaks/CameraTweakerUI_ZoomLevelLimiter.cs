@@ -1,27 +1,27 @@
 ﻿using TB_CameraTweaker.KsHelperLib.Localization;
-using TB_CameraTweaker.KsHelperLib.UI.Elements;
-using TB_CameraTweaker.KsHelperLib.UI.Elements.Slider;
+using TB_CameraTweaker.KsHelperLib.UI.Base;
+using TB_CameraTweaker.KsHelperLib.UI.ConfigBoundElements;
 using TB_CameraTweaker.Patches;
 using TimberApi.DependencyContainerSystem;
 
-namespace TB_CameraTweaker.Features.Camera_Tweaker.UI
+namespace TB_CameraTweaker.UI.Tweaks
 {
-    internal class CameraTweakerUI_ZoomLevelLimiter : CameraTweakerUIBase<float>
+    internal class CameraTweakerUI_ZoomLevelLimiter : UIMenuPatcherConfigElement<float>
     {
         public CameraTweakerUI_ZoomLevelLimiter(CameraZoomLevelLimitPatcher patcher) : base(patcher) { }
 
         private CameraZoomLevelPatcher _zoomPatcher;
 
         public override void Load() {
+            _uiPriorityOrder = 2;
             base.Load();
 
             _zoomPatcher = DependencyContainer.GetInstance<CameraZoomLevelPatcher>();
-            _uiElement.ValueChanged += (x) => _zoomPatcher.ChangeValue(x); // patch zoom with current setting so user can easly see the effect
-
+            _configEntryUIElement.ValueChanged += (x) => _zoomPatcher.ChangeValue(x); // patch zoom with current setting so user can easly see the effect
             UseConfigValue();
         }
 
-        protected override IConfigUIElement<float> GenerateUIElement() {
+        protected override IConfigUIElement<float> GenerateConfigEntry() {
             SliderConfigOptions cfg = new(
                 key: "Zoom Factor",
                 description: "Camera Zoom Factor (vanilla: 2.5)",

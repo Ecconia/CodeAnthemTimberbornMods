@@ -1,20 +1,21 @@
 ﻿using TB_CameraTweaker.KsHelperLib.Localization;
-using TB_CameraTweaker.KsHelperLib.UI.Elements;
-using TB_CameraTweaker.KsHelperLib.UI.Elements.CheckBox;
+using TB_CameraTweaker.KsHelperLib.UI.Base;
+using TB_CameraTweaker.KsHelperLib.UI.ConfigBoundElements;
 using TB_CameraTweaker.Patches;
 
-namespace TB_CameraTweaker.Features.Camera_Tweaker.UI
+namespace TB_CameraTweaker.UI.Tweaks
 {
-    internal class CameraTweakerUI_VerticalAngleLimiter : CameraTweakerUIBase<bool>
+    internal class CameraTweakerUI_VerticalAngleLimiter : UIMenuPatcherConfigElement<bool>
     {
         public CameraTweakerUI_VerticalAngleLimiter(CameraVerticalAngleLimiterPatcher patcher) : base(patcher) { }
 
         public override void Load() {
+            _uiPriorityOrder = 10;
             base.Load();
             UseConfigValue();
         }
 
-        protected override IConfigUIElement<bool> GenerateUIElement() {
+        protected override IConfigUIElement<bool> GenerateConfigEntry() {
             var cfg = new CheckBoxConfig(
                 key: "Vertical Angel Limiter Factor",
                 description: "Disable Vertical Angel Limiter",

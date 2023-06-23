@@ -2,7 +2,7 @@
 using TimberApi.UiBuilderSystem.ElementSystem;
 using UnityEngine.UIElements;
 
-namespace TB_CameraTweaker.KsHelperLib.UI.Elements.CheckBox
+namespace TB_CameraTweaker.KsHelperLib.UI.ConfigBoundElements
 {
     internal class CheckBoxUIElement : IConfigUIElement<bool>
     {

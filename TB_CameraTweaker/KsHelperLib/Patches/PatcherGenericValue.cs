@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using TB_CameraTweaker.KsHelperLib.UI.Elements;
 
 namespace TB_CameraTweaker.KsHelperLib.Patches
 {

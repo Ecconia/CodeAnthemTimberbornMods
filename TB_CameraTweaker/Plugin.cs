@@ -3,7 +3,6 @@ using BepInEx.Configuration;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
-using TB_CameraTweaker.Features.Camera_Position_Manager;
 using TB_CameraTweaker.KsHelperLib.Localization;
 using TB_CameraTweaker.KsHelperLib.Logger;
 
@@ -15,21 +14,19 @@ namespace TB_CameraTweaker
     {
         internal new static ConfigFile Config;
         internal static LogProxy Log;
-        internal static CameraPositionManagerCore _cameraPositionSaveSystem;
 
         public Plugin() {
             SetupLogger();
             Config = base.Config;
             Config.SaveOnConfigSet = true;
             SetupLOC();
-            //_cameraPositionSaveSystem = new CameraPositionCore();
             Log.LogInfo($"Plugin '{MyPluginInfo.PLUGIN_GUID}' is loaded!");
         }
 
         private void SetupLogger() {
             Log = new("[Core] ");
             LogProxy.Level = BepInEx.Logging.LogLevel.Warning;
-            LogProxy._logger = Logger;
+            LogProxy.Logger = Logger;
 #if (DEBUG)
             LogProxy.Level = BepInEx.Logging.LogLevel.All;
 #endif

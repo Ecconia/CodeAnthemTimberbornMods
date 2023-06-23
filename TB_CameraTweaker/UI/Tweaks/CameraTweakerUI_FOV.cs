@@ -1,20 +1,21 @@
 ﻿using TB_CameraTweaker.KsHelperLib.Localization;
-using TB_CameraTweaker.KsHelperLib.UI.Elements;
-using TB_CameraTweaker.KsHelperLib.UI.Elements.Slider;
+using TB_CameraTweaker.KsHelperLib.UI.Base;
+using TB_CameraTweaker.KsHelperLib.UI.ConfigBoundElements;
 using TB_CameraTweaker.Patches;
 
-namespace TB_CameraTweaker.Features.Camera_Tweaker.UI
+namespace TB_CameraTweaker.UI.Tweaks
 {
-    internal class CameraTweakerUI_FOV : CameraTweakerUIBase<float>
+    internal class CameraTweakerUI_FOV : UIMenuPatcherConfigElement<float>
     {
         public CameraTweakerUI_FOV(CameraFOVPatcher patcher) : base(patcher) { }
 
         public override void Load() {
+            _uiPriorityOrder = 1;
             base.Load();
             UseConfigValue();
         }
 
-        protected override IConfigUIElement<float> GenerateUIElement() {
+        protected override IConfigUIElement<float> GenerateConfigEntry() {
             SliderConfigOptions cfg = new(
                 key: "FOV",
                 description: "Camera FOV (vanilla: 30)",

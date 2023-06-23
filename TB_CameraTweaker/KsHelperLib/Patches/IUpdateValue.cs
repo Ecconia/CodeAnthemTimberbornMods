@@ -1,4 +1,4 @@
-﻿namespace TB_CameraTweaker.KsHelperLib.UI.Elements
+﻿namespace TB_CameraTweaker.KsHelperLib.Patches
 {
     public interface IUpdateValue<T>
     {

@@ -5,11 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using TB_CameraTweaker.KsHelperLib.Logger;
-using Timberborn.SingletonSystem;
 
 namespace TB_CameraTweaker.KsHelperLib.Localization
 {
-    internal class LocManager : ILoadableSingleton
+    internal class LocManager
 
     {
         private readonly LocLangFileHandler FileHandler;
@@ -19,13 +18,12 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
         private readonly List<string> AllLanguageTags = new();
         private readonly LogProxy Log = new("LocManager ", LogLevel.None);
 
-        public LocManager()
-        {
+        public LocManager() {
             FileHandler = new LocLangFileHandler();
+            Load();
         }
 
-        public void Load()
-        {
+        public void Load() {
 #if (!DEBUG)
             return;
 #endif
@@ -36,8 +34,7 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
             AllLanguageTags.ForEach(t => CheckFile(t));
         }
 
-        private void Initialize()
-        {
+        private void Initialize() {
             if (Initialized) { return; }
             CreateLangFolder();
             GetPredefinedLanguagesByReflection();
@@ -46,8 +43,7 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
             Initialized = true;
         }
 
-        private void CreateLangFolder()
-        {
+        private void CreateLangFolder() {
             string langPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\lang\\";
             DirectoryInfo langDir = new(langPath);
             if (!langDir.Exists) langDir.Create();
@@ -55,18 +51,15 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
             Log.LogDebug($"Language Folder Created: {langDir.FullName}");
         }
 
-        private void GetPredefinedLanguagesByReflection()
-        {
+        private void GetPredefinedLanguagesByReflection() {
             var languages = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
                 .Where(x => typeof(ILanguage).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
 
-            foreach (var language in languages)
-            {
+            foreach (var language in languages) {
                 var l = (ILanguage)Activator.CreateInstance(language);
 
                 List<LocEntryModel> entriesWithTag = new();
-                foreach (var entry in l.GetEntries())
-                {
+                foreach (var entry in l.GetEntries()) {
                     string keyWithTag = LocConfig.LocTag + "." + entry.Key;
                     LocEntryModel fixedEntry = new(keyWithTag, entry.Text, entry.Comment);
                     entriesWithTag.Add(fixedEntry);
@@ -77,21 +70,18 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
             Log.LogDebug($"Found {PredefinedLanguages.Count} Languages By Reflection");
         }
 
-        private void GetAllLanguageTags()
-        {
+        private void GetAllLanguageTags() {
             AllLanguageTags.Add(LocConfig.DefaultLanguage);
             Log.LogDebug($"Total Language Tags: {AllLanguageTags.Count} - Added Default");
 
-            foreach (var predefinedLanguage in PredefinedLanguages)
-            {
+            foreach (var predefinedLanguage in PredefinedLanguages) {
                 if (AllLanguageTags.Contains(predefinedLanguage.Key)) continue;
                 AllLanguageTags.Add(predefinedLanguage.Key);
                 Log.LogMessage($"Language Tags, Added: {predefinedLanguage}");
             }
             Log.LogDebug($"Total Language Tags: {AllLanguageTags.Count} - Added Predefined");
 
-            foreach (var additionalLanguage in LocConfig.GetLanguages())
-            {
+            foreach (var additionalLanguage in LocConfig.GetLanguages()) {
                 if (AllLanguageTags.Contains(additionalLanguage)) continue;
                 AllLanguageTags.Add(additionalLanguage);
                 Log.LogMessage($"Language Tags, Added: {additionalLanguage}");
@@ -99,37 +89,31 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
             Log.LogDebug($"Total Language Tags: {AllLanguageTags.Count} - Added Additional");
         }
 
-        private void CheckIfDefaultLanguageIsFound()
-        {
+        private void CheckIfDefaultLanguageIsFound() {
             if (PredefinedLanguages.ContainsKey(LocConfig.DefaultLanguage)) return;
             throw new Exception($"Default language {LocConfig.DefaultLanguage} is missing the predefined language, add a new class with the <ILanguage> interface");
         }
 
-        private void CheckFile(string langTag)
-        {
+        private void CheckFile(string langTag) {
             Log.LogDebug($"CheckFile, Tag: {langTag}");
 
             FileInfo langFile = new($"{LangDirPath}\\{langTag}.txt");
             Log.LogDebug($"CheckFile, File: {langFile.Name}");
 
-            if (PredefinedLanguages.ContainsKey(langTag))
-            {
+            if (PredefinedLanguages.ContainsKey(langTag)) {
                 Log.LogDebug("CheckFile, Predefined Language Exists");
 
                 var updatedEntries = PredefinedLanguages[langTag];
                 WriteUpdateToFile(langFile, updatedEntries);
                 //VerifyLangFileContent(langFile, updatedEntries, true);
-            }
-            else
-            {
+            } else {
                 Log.LogDebug("CheckFile, Predefined Language Doesn't Exist");
                 var updatedEntries = PredefinedLanguages[LocConfig.DefaultLanguage];
                 VerifyLangFileContent(langFile, updatedEntries, false);
             }
         }
 
-        private void VerifyLangFileContent(FileInfo langFile, IEnumerable<LocEntryModel> updatedEntries, bool writeComments = false)
-        {
+        private void VerifyLangFileContent(FileInfo langFile, IEnumerable<LocEntryModel> updatedEntries, bool writeComments = false) {
             //Log.LogDebug("VerifyLangFileContent, Get Current Content");
             //foreach (var item in updatedEntries)
             //{
@@ -145,11 +129,9 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
             bool inconsistent = false;
             List<LocEntryModel> newEntries = new();
 
-            foreach (var currentEntry in currentEntries)
-            {
+            foreach (var currentEntry in currentEntries) {
                 bool currentEntryStillExists = false;
-                foreach (var updatedEntry in updatedEntries)
-                {
+                foreach (var updatedEntry in updatedEntries) {
                     if (currentEntry.Key == updatedEntry.Key) currentEntryStillExists = true;
                 }
                 if (currentEntryStillExists) newEntries.Add(currentEntry);
@@ -160,8 +142,7 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
             //    Log.LogDebug($"VerifyLangFileContent,newEntries: `{item.Key}` `{item.Text}` `{item.Comment}`");
             //}
 
-            foreach (var updatedEntry in updatedEntries)
-            {
+            foreach (var updatedEntry in updatedEntries) {
                 LocEntryModel newEntry = newEntries.FirstOrDefault(x => x.Key == updatedEntry.Key);
                 if (newEntry != default) continue;
 
@@ -177,8 +158,7 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
             if (inconsistent) WriteUpdateToFile(langFile, newEntries);
         }
 
-        private void WriteUpdateToFile(FileInfo langFile, IEnumerable<LocEntryModel> updatedEntries)
-        {
+        private void WriteUpdateToFile(FileInfo langFile, IEnumerable<LocEntryModel> updatedEntries) {
             var sortedNewEntries = updatedEntries.OrderBy(x => x.Key).ToList();
             FileHandler.WriteUpdatedContent(langFile, sortedNewEntries);
         }
