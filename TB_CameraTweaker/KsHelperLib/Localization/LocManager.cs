@@ -16,7 +16,7 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
         private bool Initialized;
         private string LangDirPath;
         private readonly List<string> AllLanguageTags = new();
-        private readonly LogProxy Log = new("LocManager ", LogLevel.None);
+        private readonly LogProxy _log = new("LocManager ", LogLevel.None);
 
         public LocManager() {
             FileHandler = new LocLangFileHandler();
@@ -24,13 +24,10 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
         }
 
         public void Load() {
-#if (!DEBUG)
-            return;
-#endif
-            Log.LogDebug("Load()");
+            _log.LogDebug("Load()");
             Initialize();
-            Log.LogDebug("Initialized");
-            Log.LogInfo("Check Each Language");
+            _log.LogDebug("Initialized");
+            _log.LogInfo("Check Each Language");
             AllLanguageTags.ForEach(t => CheckFile(t));
         }
 
@@ -48,7 +45,7 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
             DirectoryInfo langDir = new(langPath);
             if (!langDir.Exists) langDir.Create();
             LangDirPath = langDir.Exists ? langDir.FullName : throw new DirectoryNotFoundException($"Couldn't create folder: {langDir.FullName}");
-            Log.LogDebug($"Language Folder Created: {langDir.FullName}");
+            _log.LogDebug($"Language Folder Created: {langDir.FullName}");
         }
 
         private void GetPredefinedLanguagesByReflection() {
@@ -67,26 +64,26 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
                 bool successfullyAdded = PredefinedLanguages.TryAdd(l.Tag, entriesWithTag);
                 if (!successfullyAdded) throw new Exception($"Failed to add language: {l.Tag}");
             }
-            Log.LogDebug($"Found {PredefinedLanguages.Count} Languages By Reflection");
+            _log.LogDebug($"Found {PredefinedLanguages.Count} Languages By Reflection");
         }
 
         private void GetAllLanguageTags() {
             AllLanguageTags.Add(LocConfig.DefaultLanguage);
-            Log.LogDebug($"Total Language Tags: {AllLanguageTags.Count} - Added Default");
+            _log.LogDebug($"Total Language Tags: {AllLanguageTags.Count} - Added Default");
 
             foreach (var predefinedLanguage in PredefinedLanguages) {
                 if (AllLanguageTags.Contains(predefinedLanguage.Key)) continue;
                 AllLanguageTags.Add(predefinedLanguage.Key);
-                Log.LogMessage($"Language Tags, Added: {predefinedLanguage}");
+                _log.LogMessage($"Language Tags, Added: {predefinedLanguage}");
             }
-            Log.LogDebug($"Total Language Tags: {AllLanguageTags.Count} - Added Predefined");
+            _log.LogDebug($"Total Language Tags: {AllLanguageTags.Count} - Added Predefined");
 
             foreach (var additionalLanguage in LocConfig.GetLanguages()) {
                 if (AllLanguageTags.Contains(additionalLanguage)) continue;
                 AllLanguageTags.Add(additionalLanguage);
-                Log.LogMessage($"Language Tags, Added: {additionalLanguage}");
+                _log.LogMessage($"Language Tags, Added: {additionalLanguage}");
             }
-            Log.LogDebug($"Total Language Tags: {AllLanguageTags.Count} - Added Additional");
+            _log.LogDebug($"Total Language Tags: {AllLanguageTags.Count} - Added Additional");
         }
 
         private void CheckIfDefaultLanguageIsFound() {
@@ -95,19 +92,19 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
         }
 
         private void CheckFile(string langTag) {
-            Log.LogDebug($"CheckFile, Tag: {langTag}");
+            _log.LogDebug($"CheckFile, Tag: {langTag}");
 
             FileInfo langFile = new($"{LangDirPath}\\{langTag}.txt");
-            Log.LogDebug($"CheckFile, File: {langFile.Name}");
+            _log.LogDebug($"CheckFile, File: {langFile.Name}");
 
             if (PredefinedLanguages.ContainsKey(langTag)) {
-                Log.LogDebug("CheckFile, Predefined Language Exists");
+                _log.LogDebug("CheckFile, Predefined Language Exists");
 
                 var updatedEntries = PredefinedLanguages[langTag];
                 WriteUpdateToFile(langFile, updatedEntries);
                 //VerifyLangFileContent(langFile, updatedEntries, true);
             } else {
-                Log.LogDebug("CheckFile, Predefined Language Doesn't Exist");
+                _log.LogDebug("CheckFile, Predefined Language Doesn't Exist");
                 var updatedEntries = PredefinedLanguages[LocConfig.DefaultLanguage];
                 VerifyLangFileContent(langFile, updatedEntries, false);
             }

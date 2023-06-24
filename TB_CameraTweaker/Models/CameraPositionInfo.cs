@@ -6,6 +6,7 @@ namespace TB_CameraTweaker.Models
 {
     internal class CameraPositionInfo
     {
+        [JsonIgnore]
         public CameraState CameraState;
         public float Fov { get; set; }
         public string Name { get; set; }
@@ -22,8 +23,7 @@ namespace TB_CameraTweaker.Models
         public CameraPositionInfo(string name, Vector3 target, float zoomLevel, float horizontalAngle, float verticalAngle, float fov)
             : this(name, new CameraState(target, zoomLevel, horizontalAngle, verticalAngle), fov) { }
 
-        public CameraPositionInfo(string name, CameraState cameraState, float fov)
-        {
+        public CameraPositionInfo(string name, CameraState cameraState, float fov) {
             Name = name;
             CameraState = cameraState;
             Fov = fov;
@@ -34,11 +34,9 @@ namespace TB_CameraTweaker.Models
         public CameraPositionInfo(string name, CameraPositionInfo toCopy) : this(
             name: name,
             cameraState: toCopy.CameraState,
-            fov: toCopy.Fov)
-        { }
+            fov: toCopy.Fov) { }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             return $"Camera Position Info: Name: {Name}\n" +
                 //$"Target: {Target}\n" +
                 //$"ZoomLevel: {ZoomLevel}\n" +
@@ -46,6 +44,16 @@ namespace TB_CameraTweaker.Models
                 //$"VerticalAngle: {VerticalAngle}\n" +
                 $"Fov: {Fov}\n" +
                 $"CameraState: {CameraState}\n";
+        }
+
+        public bool IsSamePosition(CameraPositionInfo instance) {
+            bool isEqual = true;
+            if (Target != instance.Target) isEqual = false;
+            if (ZoomLevel != instance.ZoomLevel) isEqual = false;
+            if (HorizontalAngle != instance.HorizontalAngle) isEqual = false;
+            if (VerticalAngle != instance.VerticalAngle) isEqual = false;
+            if (Fov != instance.Fov) isEqual = false;
+            return isEqual;
         }
     }
 }

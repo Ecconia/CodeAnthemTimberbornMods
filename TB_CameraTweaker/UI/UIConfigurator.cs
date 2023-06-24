@@ -1,5 +1,4 @@
 ﻿using Bindito.Core;
-using TB_CameraTweaker.UI.Position_Manager;
 using TB_CameraTweaker.UI.Tweaks;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
@@ -18,9 +17,9 @@ namespace TB_CameraTweaker.UI
             containerDefinition.Bind<CameraTweakerUI_ZoomSpeed>().AsSingleton();
 
             // position manager
-            containerDefinition.Bind<CameraPositionUI_SettingsTitle>().AsSingleton();
-            containerDefinition.Bind<CameraPositionUI_Freeze>().AsSingleton();
-            containerDefinition.Bind<CameraPositionUI_Table>().AsSingleton();
+            //containerDefinition.Bind<CameraPositionUI_SettingsTitle>().AsSingleton();
+            //containerDefinition.Bind<CameraPositionUI_Freeze>().AsSingleton();
+            //containerDefinition.Bind<CameraPositionUI_Table>().AsSingleton();
         }
     }
 }

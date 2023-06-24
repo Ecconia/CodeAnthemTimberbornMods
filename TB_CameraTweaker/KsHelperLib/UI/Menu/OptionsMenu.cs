@@ -45,7 +45,7 @@ namespace TB_CameraTweaker.KsHelperLib.UI.Menu
         /// <returns></returns>
         public VisualElement GetPanel() {
             UIBoxBuilder boxBuilder = _uiBuilder.CreateBoxBuilder()
-                .SetHeight(new Length(600, Pixel))
+                .SetHeight(new Length(350, Pixel))
                 .SetWidth(new Length(600, Pixel))
                 .ModifyScrollView(builder => builder.SetName("elementPreview"));
 

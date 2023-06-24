@@ -1,12 +1,12 @@
 ﻿using HarmonyLib;
-using TB_CameraTweaker.KsHelperLib.Patches;
+using TB_CameraTweaker.KsHelperLib.BaseHelpers;
 using TimberApi.DependencyContainerSystem;
 using Timberborn.CameraSystem;
 
 namespace TB_CameraTweaker.Patches
 {
     [HarmonyPatch(typeof(CameraComponent), nameof(CameraComponent.LateUpdate))]
-    internal class CameraZoomSpeedPatcher : PatcherGenericValue<float>
+    internal class CameraZoomSpeedPatcher : GenericValue<float>
     {
         private static CameraZoomSpeedPatcher Instance => _instance ??= DependencyContainer.GetInstance<CameraZoomSpeedPatcher>();
 
@@ -17,6 +17,7 @@ namespace TB_CameraTweaker.Patches
         private void PostfixPatch(CameraComponent instance) {
             if (IsDirty) {
                 instance._zoomSpeed = NewValue;
+                Plugin.Log.LogDebug("CameraZoomSpeedPatcher() - " + NewValue);
                 IsDirty = false;
             }
         }

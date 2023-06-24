@@ -25,6 +25,13 @@ namespace TB_CameraTweaker.Lang
                 new LocEntryModel("menu.positiontitle", "Camera Position Manager", "Sub title of camera tweaks" ),
                 new LocEntryModel("menu.freeze", "Freeze Camera", "Header of option: Freeze" ),
 
+                // interface
+                new LocEntryModel("interface.label", "Camera Manager" ),
+                new LocEntryModel("interface.freezebutton", "Freeze" ),
+                new LocEntryModel("interface.addbutton", "Add" ),
+                new LocEntryModel("interface.removebutton", "Delete" ),
+                new LocEntryModel("interface.entername", "Enter Camera Name" ),
+
                 // menu global keywords
                 new LocEntryModel("single.default", "Default" ),
                 new LocEntryModel("single.original", "Original" ),

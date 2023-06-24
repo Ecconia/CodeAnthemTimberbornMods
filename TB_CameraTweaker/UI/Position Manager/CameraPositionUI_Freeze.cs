@@ -1,31 +1,19 @@
-﻿using TB_CameraTweaker.KsHelperLib.Localization;
+﻿using TB_CameraTweaker.Features.Camera_Freeze;
+using TB_CameraTweaker.KsHelperLib.Localization;
 using TB_CameraTweaker.KsHelperLib.UI.Base;
 using TB_CameraTweaker.KsHelperLib.UI.ConfigBoundElements;
-using TB_CameraTweaker.Models;
-using TB_CameraTweaker.Patches;
 
 namespace TB_CameraTweaker.UI.Position_Manager
 {
     internal class CameraPositionUI_Freeze : UIMenuConfigOnly<bool>
     {
-        private readonly CameraGetPositionPatcher _cameraGetPositionPatcher;
-        private readonly CameraSetPositionPatcher _cameraSetPositionPatcher;
+        private readonly CameraPositionFreezer _freezer;
 
-        public CameraPositionUI_Freeze(CameraGetPositionPatcher cameraGetPositionPatcher, CameraSetPositionPatcher cameraSetPositionPatcher) {
-            _cameraGetPositionPatcher = cameraGetPositionPatcher;
-            _cameraSetPositionPatcher = cameraSetPositionPatcher;
+        public CameraPositionUI_Freeze(CameraPositionFreezer freezer) {
+            _freezer = freezer;
         }
 
-        protected override void OnValueChanged(bool newValue) {
-            if (newValue) {
-                //Plugin.Log.LogDebug("Freeze Camera");
-                var currentPosition = new CameraPositionInfo("FreezePosition", _cameraGetPositionPatcher.GetCurrentPosition());
-                _cameraSetPositionPatcher.Freeze(currentPosition);
-            } else {
-                //Plugin.Log.LogDebug("Unfreeze Camera");
-                _cameraSetPositionPatcher.Unfreeze();
-            }
-        }
+        protected override void OnValueChanged(bool newValue) => _freezer.ChangeValue(newValue);
 
         public override void Load() {
             _uiPriorityOrder = 101;

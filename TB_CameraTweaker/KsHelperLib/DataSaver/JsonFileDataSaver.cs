@@ -5,25 +5,21 @@ using TB_CameraTweaker.KsHelperLib.Logger;
 
 namespace TB_CameraTweaker.KsHelperLib.DataSaver
 {
-    internal class JsonFileDataSaver<T> : IDataSaver<T> where T : class
+    internal class JsonFileDataSaver<T> : IDataSaver<T>
     {
         private readonly LogProxy _log = new("Json Saver: " + nameof(T));
-        private readonly string _jsonSaveFile;
-
-        public JsonFileDataSaver(string saveFile) {
-            _jsonSaveFile = saveFile;
-        }
+        public string SaveFile { get; set; }
 
         public IEnumerable<T> Load() {
             IEnumerable<T> loadedData = new List<T>();
 
-            if (!File.Exists(_jsonSaveFile)) {
-                _log.LogWarning("Load() - Failed: file does not exist: " + _jsonSaveFile);
+            if (!File.Exists(SaveFile)) {
+                _log.LogDebug("Load() - Failed: file does not exist: " + SaveFile);
                 return loadedData;
             }
 
             try {
-                using (StreamReader r = new(_jsonSaveFile)) {
+                using (StreamReader r = new(SaveFile)) {
                     string json = r.ReadToEnd();
                     var deserializedData = JsonConvert.DeserializeObject<List<T>>(json);
                     if (deserializedData != null) {
@@ -40,29 +36,30 @@ namespace TB_CameraTweaker.KsHelperLib.DataSaver
 
         public bool Save(List<T> objectsToSave) {
             if (objectsToSave == null || objectsToSave?.Count == 0) {
-                _log.LogError("Save() - Failed: Invalid data");
+                // not sure if we should delete save file here to avoid corrupt data
+                DeleteSaveFile();
+                _log.LogInfo("Save() - Failed: No objects, deleted save file");
                 return false;
             }
 
             try {
                 string objectsAsJsonString = JsonConvert.SerializeObject(objectsToSave, Formatting.Indented);
-                using (StreamWriter w = new(_jsonSaveFile, false)) {
+                using (StreamWriter w = new(SaveFile, false)) {
                     w.WriteLine(objectsAsJsonString);
                 }
             }
             catch (System.Exception e) {
                 _log.LogFatal("Save() - Failed: Unable to save data. Error: " + e);
                 // not sure if we should delete save file here to avoid corrupt data
-                //DeleteSaveFile()
+                DeleteSaveFile();
                 return false;
             }
             return true;
         }
 
         private void DeleteSaveFile() {
-            if (File.Exists(_jsonSaveFile)) {
-                File.Delete(_jsonSaveFile);
-                _log.LogError("DeleteSaveFile() - Deleted save file");
+            if (File.Exists(SaveFile)) {
+                File.Delete(SaveFile);
             }
         }
     }

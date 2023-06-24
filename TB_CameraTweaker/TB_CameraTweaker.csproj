@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="../GamePath.props" />
 
@@ -17,6 +17,12 @@
 		<Company>Kumare</Company>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Features\Camera Freeze Manager\**" />
+	  <EmbeddedResource Remove="Features\Camera Freeze Manager\**" />
+	  <None Remove="Features\Camera Freeze Manager\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <Compile Remove="Features\Camera Position Manager\UI\CameraPositionRowElement.cs" />

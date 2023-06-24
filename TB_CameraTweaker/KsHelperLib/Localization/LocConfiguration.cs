@@ -7,8 +7,7 @@ namespace TB_CameraTweaker.KsHelperLib.Localization
     [Configurator(SceneEntrypoint.MainMenu)]
     internal class LocConfiguration : IConfigurator
     {
-        public void Configure(IContainerDefinition containerDefinition)
-        {
+        public void Configure(IContainerDefinition containerDefinition) {
             containerDefinition.Bind<LocManager>().AsSingleton();
         }
     }

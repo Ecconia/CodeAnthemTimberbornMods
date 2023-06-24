@@ -6,6 +6,8 @@ namespace TB_CameraTweaker.KsHelperLib.DataSaver
     {
         IEnumerable<T> Load();
 
+        string SaveFile { get; set; }
+
         bool Save(List<T> objectsToSave);
     }
 }

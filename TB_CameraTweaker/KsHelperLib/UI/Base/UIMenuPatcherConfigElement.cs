@@ -12,6 +12,8 @@ namespace TB_CameraTweaker.KsHelperLib.UI.Base
     {
         protected IConfigUIElement<T> _configEntryUIElement; // UI Element used like slider, checkbox etc
 
+        public T CurrentValue { get => _configEntryUIElement.CurrentValue; }
+
         protected UIMenuPatcherConfigElement(IUpdateValue<T> patcher) : base(patcher) { }
 
         protected abstract IConfigUIElement<T> GenerateConfigEntry();

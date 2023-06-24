@@ -1,107 +1,131 @@
-﻿using TB_CameraTweaker.CameraPositions.Store;
-using TB_CameraTweaker.KsHelperLib.DataSaver;
+﻿using System;
+using TB_CameraTweaker.CameraPositions.Store;
+using TB_CameraTweaker.Features.Camera_Freeze;
 using TB_CameraTweaker.KsHelperLib.Logger;
 using TB_CameraTweaker.Models;
 using TB_CameraTweaker.Patches;
 using TB_CameraTweaker.UI.Tweaks;
-using TimberApi.DependencyContainerSystem;
-using TimberApi.UiBuilderSystem.ElementSystem;
-using UnityEngine;
 
 namespace TB_CameraTweaker.Camera_Position_Manager
 {
     internal class CameraPositionManagerCore
     {
-        public ICameraPositionStore Store { get; private set; }
-        private readonly ICameraPositionStore _store;
-        //private readonly List<CameraPositionRowElement> _cameraPositionRowElements = new();
+        public CameraPositionStore Store { get; private set; }
+
+        public Action ActiveCameraPositionChanged;
         private CameraPositionInfo _activePosition;
+
+        public Action OnCameraMoved;
+
+        public CameraPositionInfo? ActivePosition { get => _activePosition; private set { _activePosition = value; ActiveCameraPositionChanged?.Invoke(); } }
+        public bool CameraIsActive { get => ActivePosition != null; }
+
         private readonly LogProxy _log = new("[Camera Positions: Core] ");
-        private readonly CameraSetPositionPatcher _cameraPositionPatcher;
+        private readonly CameraSetPositionPatcher _cameraSetPositionPatcher;
         private readonly CameraGetPositionPatcher _cameraGetPositionPatcher;
+        private readonly CameraFOVPatcher _cameraFOVPatcher;
+        private readonly CameraZoomLevelLimitPatcher _cameraZoomLevelLimitPatcher;
+        private readonly CameraZoomLevelPatcher _cameraZoomLevelPatcher;
+        private readonly CameraPositionFreezer _cameraPositionFreezer;
 
-        public CameraPositionManagerCore(CameraSetPositionPatcher cameraPositionPatcher, CameraGetPositionPatcher cameraGetPositionPatcher) {
-            _cameraPositionPatcher = cameraPositionPatcher;
+        private readonly CameraTweakerUI_FOV _cameraTweakerUI_FOV;
+        private readonly CameraTweakerUI_ZoomLevelLimiter _cameraTweakerUI_ZoomLevelLimiter;
+
+        private bool _ignoreReset = false;
+
+        public CameraPositionManagerCore(
+            CameraPositionStore cameraPositionStore,
+            CameraSetPositionPatcher cameraPositionPatcher,
+            CameraGetPositionPatcher cameraGetPositionPatcher,
+            CameraFOVPatcher cameraFOVPatcher,
+            CameraZoomLevelLimitPatcher cameraZoomLevelLimit,
+            CameraPositionFreezer cameraPositionFreezer,
+            CameraZoomLevelPatcher cameraZoomLevel,
+            CameraTweakerUI_FOV cameraTweakerUI_FOV,
+            CameraTweakerUI_ZoomLevelLimiter cameraTweakerUI_ZoomLevelLimiter) {
+            Store = cameraPositionStore;
+            _cameraSetPositionPatcher = cameraPositionPatcher;
             _cameraGetPositionPatcher = cameraGetPositionPatcher;
+            _cameraFOVPatcher = cameraFOVPatcher;
+            _cameraZoomLevelLimitPatcher = cameraZoomLevelLimit;
+            _cameraPositionFreezer = cameraPositionFreezer;
+            _cameraZoomLevelPatcher = cameraZoomLevel;
+            _cameraTweakerUI_FOV = cameraTweakerUI_FOV;
+            _cameraTweakerUI_ZoomLevelLimiter = cameraTweakerUI_ZoomLevelLimiter;
 
-            string saveFile = $@"{BepInEx.Paths.ConfigPath}\{MyPluginInfo.PLUGIN_GUID}_cameraPositions.json";
-            IDataSaver<CameraPositionInfo> saver = new JsonFileDataSaver<CameraPositionInfo>(saveFile);
-            Store = new CameraPositionStore(saver);
-
-            //AddDummyData();
-
-            //_cameraSaveSystem.ListChanged += () => RefreshCameraPositionRows();
-            //RefreshCameraPositionRows();
-
-            Plugin.Log.LogWarning("CameraPositionSaveSystemCore Init");
+            SubForCameraChanges(true);
         }
 
-        private void AddUIElements(VisualElementBuilder builder) {
-            builder
-            .AddPreset(factory => factory.Buttons().Button(name: "Button Name", text: "Add Current Camera", builder: builder => builder.SetStyle(style => {
-                style.width = 100;
-
-                style.color = Color.red;
-            })
-                .ModifyElement(x => x.clicked += () => AddCurrentCameraButton())
-            ));
-
-            Plugin.Log.LogWarning("CameraPositionSaveSystemCore Making UI");
-            //RefreshCameraPositionRows();
-
-            //foreach (var pos in _store.SavedCameraPositions) {
-            //    new CameraPositionRowElement(pos.Name, this).Build(builder);
-            //}
-
-            //foreach (var row in _cameraPositionRowElements) {
-            //    row.Build(builder);
-            //}
+        public void AddCurrentCameraButton(string name) {
+            //string cameraName = (string.IsNullOrEmpty(name)) ? "Camera: #" + new System.Random().Next(1, 99) : name;
+            string cameraName = (string.IsNullOrEmpty(name)) ? "Camera: #" + (Store.SavedCameraPositions.Count + 1) : name;
+            var camera = new CameraPositionInfo(cameraName, _cameraGetPositionPatcher.GetCurrentPosition());
+            Store.AddCameraPosition(camera);
+            ActivePosition = camera;
         }
 
-        private void AddCurrentCameraButton() {
-            //if (_cameraPositionPatcher == null) {
-            //    _log.LogError("AddCameraPosition() - Failed: Instance is null, camera not found");
-            //    return;
-            //}
-
-            string cameraName = GetCameraNamePopup();
-            _store.AddCameraPosition(new(cameraName, _cameraGetPositionPatcher.GetCurrentPosition()));
+        private void SubForCameraChanges(bool doSub) {
+            _cameraGetPositionPatcher.OnNewCameraPosition -= CameraWasMoved;
+            if (doSub) {
+                _cameraGetPositionPatcher.OnNewCameraPosition += CameraWasMoved;
+            }
         }
 
-        private string GetCameraNamePopup() {
-            string randomName = "Random Name: " + new System.Random().Next(1, 99);
-            //_log.LogDebug("GetCameraNamePopup() - Random name generated: " + randomName);
-            return randomName;
+        private void CameraWasMoved() {
+            OnCameraMoved?.Invoke();
+            if (_ignoreReset) return;
+            if (IsCurrentPositionActivePosition()) return;
+            ResetBackToConfigValues();
         }
 
-        //private void RefreshCameraPositionRows() {
-        //    _cameraPositionRowElements.Clear();
-        //    foreach (var pos in _cameraSaveSystem.SavedCameraPositions) {
-        //        _cameraPositionRowElements.Add(new CameraPositionRowElement(pos.Name));
-        //    }
-        //}
+        public void SetNextActive() => ActivePosition = Store.GetNext(ActivePosition);
 
-        internal void RemoveCameraPosition(string cameraPositionName) => _store.RemoveCameraPosition(cameraPositionName);
+        public void SetPreviousActive() => ActivePosition = Store.GetPrevious(ActivePosition);
 
-        internal void SetActiveCameraPosition(string cameraPositionName) {
-            if (!_store.GetCameraPosition(cameraPositionName, out CameraPositionInfo cam)) {
-                _log.LogDebug("SetActiveCameraPosition() - Failed: Could not find position data for: " + cameraPositionName);
+        public void GetFirst() {
+            if (Store.SavedCameraPositions.Count > 0) {
+                ActivePosition = Store.SavedCameraPositions[0];
                 return;
             }
+            ActivePosition = null;
+        }
 
-            //if (_cameraPositionPatcher == null) {
-            //    _log.LogError("SetActiveCameraPosition() - Failed: Instance is null, camera not found");
-            //    return;
-            //}
+        public void RemoveActiveCamera() {
+            if (ActivePosition != null) RemoveCamera(ActivePosition);
+        }
 
-            _activePosition = cam;
-            _cameraPositionPatcher.SetJumpPosition(cam);
-            _log.LogDebug("SetActiveCameraPosition() - Success: Set active: " + cam.Name);
+        internal void RemoveCamera(CameraPositionInfo camera) {
+            Store.RemoveCameraPosition(camera);
+            GetFirst();
+        }
+
+        public bool IsCurrentPositionActivePosition() {
+            if (ActivePosition != null) {
+                if (ActivePosition.IsSamePosition(_cameraGetPositionPatcher.GetCurrentPosition())) return true;
+            }
+            return false;
+        }
+
+        public void JumpToActivePosition() {
+            if (ActivePosition == null) {
+                _log.LogDebug("JumpToActivePosition() - null");
+                return;
+            }
+            _ignoreReset = true;
+            _cameraFOVPatcher.ChangeValue(ActivePosition.Fov);
+            _cameraZoomLevelLimitPatcher.ChangeValue(ActivePosition.ZoomLevel);
+            _cameraZoomLevelPatcher.ChangeValue(ActivePosition.ZoomLevel);
+            _cameraSetPositionPatcher.SetJumpPosition(ActivePosition);
+            _log.LogDebug("JumpToActivePosition() - Jumped to " + ActivePosition.Name);
+            _ignoreReset = false;
         }
 
         public void ResetBackToConfigValues() {
-            DependencyContainer.GetInstance<CameraTweakerUI_FOV>().UseConfigValue();
-            DependencyContainer.GetInstance<CameraTweakerUI_ZoomLevelLimiter>().UseConfigValue();
+            _cameraTweakerUI_FOV.UseConfigValue();
+            var zoomLimit = _cameraTweakerUI_ZoomLevelLimiter.CurrentValue;
+            _cameraZoomLevelLimitPatcher.ChangeValue(zoomLimit);
+            //_cameraZoomLevelPatcher.ChangeValue(zoomLimit);
+            _log.LogDebug("ResetBackToConfigValues() - Reset");
         }
 
         //private void AddDummyData() {
@@ -111,10 +135,10 @@ namespace TB_CameraTweaker.Camera_Position_Manager
         //    _store.AddCameraPosition(testCamera2);
         //}
 
-        internal bool IsPositionActive(string positionName) {
-            if (_activePosition == null) return false;
-            if (_activePosition.Name == positionName) return true;
-            return false;
+        public bool Freeze() {
+            bool isFrozen = _cameraPositionFreezer.Toggle();
+            SubForCameraChanges(!isFrozen);
+            return isFrozen;
         }
     }
 }

@@ -4,16 +4,18 @@ using System.Linq;
 using TB_CameraTweaker.KsHelperLib.DataSaver;
 using TB_CameraTweaker.KsHelperLib.Logger;
 using TB_CameraTweaker.Models;
+using Timberborn.Common;
+using Timberborn.SingletonSystem;
 
 //TODO: maybe add events for updated/changed position info and trigger save method
 
 namespace TB_CameraTweaker.CameraPositions.Store
 {
-    internal class CameraPositionStore : ICameraPositionStore
+    internal class CameraPositionStore : ILoadableSingleton
     {
         public event Action ListChanged;
 
-        public List<CameraPositionInfo> SavedCameraPositions { get => _savedCameraPositions; }
+        public ReadOnlyList<CameraPositionInfo> SavedCameraPositions { get; }
 
         private readonly LogProxy _log = new("[Camera Positions: Store] ");
         private readonly List<CameraPositionInfo> _savedCameraPositions = new();
@@ -21,7 +23,8 @@ namespace TB_CameraTweaker.CameraPositions.Store
 
         public CameraPositionStore(IDataSaver<CameraPositionInfo> saver) {
             _saver = saver;
-            _savedCameraPositions.AddRange(_saver.Load());
+            _saver.SaveFile = $@"{BepInEx.Paths.ConfigPath}\{MyPluginInfo.PLUGIN_GUID}_cameraPositions.json";
+            SavedCameraPositions = _savedCameraPositions.AsReadOnlyList();
         }
 
         public bool AddCameraPosition(CameraPositionInfo cameraPositionInfo) {
@@ -29,13 +32,11 @@ namespace TB_CameraTweaker.CameraPositions.Store
                 _log.LogError("AddCameraPosition() - Failed: object is null");
                 return false;
             }
-
             bool isNameAlreadyUsed = _savedCameraPositions.Any(x => x.Name == cameraPositionInfo.Name);
             if (isNameAlreadyUsed) {
                 _log.LogError($"AddCameraPosition() - Failed: a camera position with the name '{cameraPositionInfo.Name}' already exists");
                 return false;
             }
-
             _savedCameraPositions.Add(cameraPositionInfo);
             _log.LogWarning("AddCameraPosition() - Success: " + cameraPositionInfo.Name);
             _saver.Save(_savedCameraPositions);
@@ -50,6 +51,24 @@ namespace TB_CameraTweaker.CameraPositions.Store
                 return false;
             }
             return true;
+        }
+
+        public CameraPositionInfo GetNext(CameraPositionInfo current) {
+            if (current == null) {
+                return _savedCameraPositions.FirstOrDefault();
+            }
+            return _savedCameraPositions.SkipWhile(x => x != current).Skip(1).DefaultIfEmpty(_savedCameraPositions[0]).FirstOrDefault();
+        }
+
+        public CameraPositionInfo GetPrevious(CameraPositionInfo current) {
+            if (current == null) {
+                return _savedCameraPositions.LastOrDefault();
+            }
+            return _savedCameraPositions.TakeWhile(x => x != current).DefaultIfEmpty(_savedCameraPositions[^1]).LastOrDefault();
+        }
+
+        public void Load() {
+            _savedCameraPositions.AddRange(_saver.Load());
         }
 
         public bool RemoveCameraPosition(CameraPositionInfo cameraPositionInfo) {
@@ -76,5 +95,10 @@ namespace TB_CameraTweaker.CameraPositions.Store
             }
             return RemoveCameraPosition(cameraPositionInfo);
         }
+
+        //internal CameraPositionInfo GetFirst() {
+        //    if (_savedCameraPositions.Count == 0) return new CameraPositionInfo("none", DependencyContainer.GetInstance<CameraGetPositionPatcher>().GetCurrentPosition());
+        //    return _savedCameraPositions.FirstOrDefault();
+        //}
     }
 }

@@ -12,7 +12,7 @@ namespace TB_CameraTweaker.UI.Position_Manager
     internal class CameraPositionUI_Table : UIMenuElement
     {
         private readonly CameraPositionManagerCore _core;
-        private ICameraPositionStore Store => _core.Store;
+        private CameraPositionStore Store => _core.Store;
         private VisualElementBuilder _builder;
 
         public CameraPositionUI_Table(CameraPositionManagerCore core) {
@@ -25,14 +25,14 @@ namespace TB_CameraTweaker.UI.Position_Manager
         }
 
         protected override void GenerateUIContent(VisualElementBuilder builder) {
-            _builder = builder;
+            //_builder = builder;
 
-            //_builder.AddComponent(builder => builder.SetFlexDirection(FlexDirection.Row).SetJustifyContent(Justify.SpaceBetween)
-            _builder.AddPreset(factory => factory.Labels().DefaultHeader("preview.listview.color", builder: builder => builder.SetStyle(style => { style.alignSelf = Align.Center; style.marginBottom = new Length(10, LengthUnit.Pixel); })));
-            _builder.AddPreset(factory => factory.ListViews().CustomListView(Store.SavedCameraPositions,
-                CameraPositionItem,
-                AddCameraRow
-            ));
+            ////_builder.AddComponent(builder => builder.SetFlexDirection(FlexDirection.Row).SetJustifyContent(Justify.SpaceBetween)
+            //_builder.AddPreset(factory => factory.Labels().DefaultHeader("preview.listview.color", builder: builder => builder.SetStyle(style => { style.alignSelf = Align.Center; style.marginBottom = new Length(10, LengthUnit.Pixel); })));
+            //_builder.AddPreset(factory => factory.ListViews().CustomListView(Store.SavedCameraPositions,
+            //    CameraPositionItem,
+            //    AddCameraRow
+            //));
             //_builder.Build();
         }
 
