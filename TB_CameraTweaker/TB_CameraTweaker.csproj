@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="../GamePath.props" />
 
@@ -6,7 +6,7 @@
 		<TargetFramework>netstandard2.1</TargetFramework>
 		<AssemblyName>TB_CameraTweaker</AssemblyName>
 		<Description>Timberborn Mod: Camera Tweaker</Description>
-		<Version>1.1.0</Version>
+		<Version>1.1.1</Version>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<LangVersion>latest</LangVersion>
 		<RestoreAdditionalProjectSources>
@@ -38,7 +38,7 @@
 		<PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
 		<PackageReference Include="BepInEx.Core" Version="5.4.19" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="TimberAPI" Version="0.5.5.5" />
+		<PackageReference Include="TimberAPI" Version="0.6.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
